@@ -1,0 +1,31 @@
+/*
+ * Cascade order: Tailwind theme tokens, then the ported Vythea design system, then Tailwind
+ * utilities on top. Preflight is left out on purpose: the original stylesheet is written
+ * against browser defaults, and a reset would shift its spacing.
+ */
+@layer theme, legacy, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "../styles/base.css" layer(legacy);
+@import "../styles/home.css" layer(legacy);
+@import "../styles/overrides.css" layer(legacy);
+
+@theme {
+  --color-paper: #f2f2f0;
+  --color-ink: #00126b;
+  --color-ink-black: #0a0a0a;
+  --color-ink-mute: #33499b;
+  --color-blue: #0040ff;
+  --color-blue-deep: #000b66;
+  --color-on-blue: #f2f4ff;
+  --color-hairline-blue: rgba(242, 244, 255, 0.26);
+  --color-hairline-ink: rgba(0, 18, 107, 0.18);
+
+  --font-cond: "Barlow Condensed", "Heebo", "Roboto Condensed", "Arial Narrow", sans-serif;
+  --font-sans: "Barlow", "Heebo", "Roboto", system-ui, -apple-system, sans-serif;
+  --font-mono: "DM Mono", "Heebo", "Roboto Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-serif: "Bodoni Moda", Georgia, serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}

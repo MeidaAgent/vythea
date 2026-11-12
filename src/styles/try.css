@@ -1,0 +1,172 @@
+.offer {
+  background: var(--blue);
+  color: var(--on-blue);
+  background-image: radial-gradient(#f2f4ff24 1px, #0000 1.2px);
+  background-size: 14px 14px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: clamp(24px, 4vw, 72px);
+  padding: clamp(24px, 4.4vw, 64px);
+  display: grid;
+}
+.offer.none {
+  grid-template-columns: minmax(0, 1fr);
+}
+.offer .micro {
+  color: var(--on-blue-mute);
+}
+.offer-copy {
+  min-width: 0;
+}
+.offer-title {
+  font-family: var(--cond);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+  margin: 16px 0 20px;
+  font-size: clamp(40px, 6vw, 92px);
+  font-weight: 200;
+  line-height: 0.92;
+}
+.offer-title:lang(ru) {
+  line-height: 1;
+}
+.offer-sub {
+  max-width: 44ch;
+  margin: 0;
+  font-size: clamp(16px, 1.3vw, 20px);
+  font-weight: 300;
+  line-height: 1.5;
+}
+.offer-facts {
+  letter-spacing: 0.14em;
+  margin: 18px 0 0;
+}
+.offer-act {
+  margin-top: clamp(26px, 3.4vw, 40px);
+}
+.offer-act:empty {
+  display: none;
+}
+.offer-act .micro {
+  color: var(--on-blue-mute);
+}
+.offer-amount {
+  text-align: end;
+}
+.offer-n {
+  font-family: var(--cond);
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  font-size: clamp(96px, 15vw, 240px);
+  font-weight: 200;
+  line-height: 0.8;
+  display: inline-block;
+}
+.offer-amount .micro {
+  margin-top: 14px;
+}
+@media (width<=760px) {
+  .offer {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+  .offer-amount {
+    text-align: start;
+    order: -1;
+  }
+  .offer-n {
+    font-size: clamp(88px, 30vw, 160px);
+  }
+}
+
+.claim {
+  min-width: 0;
+}
+.claim .claim-wait {
+  align-items: flex-start;
+  padding: 8px 0;
+}
+.claim-row {
+  flex-wrap: wrap;
+  gap: 10px;
+  display: flex;
+}
+.claim-row .btn {
+  cursor: pointer;
+}
+.claim-row .btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.claim-note {
+  border-inline-start: 2px solid var(--on-blue);
+  background: #00063852;
+  max-width: 56ch;
+  margin: 0 0 18px;
+  padding: 12px 16px;
+  font-weight: 300;
+  line-height: 1.5;
+}
+.claim-note.after {
+  margin: 16px 0 0;
+}
+.claim-note a,
+.claim-done a {
+  color: inherit;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+.claim-done {
+  max-width: 44ch;
+  margin: 0 0 20px;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.45;
+}
+@media (width<=520px) {
+  .claim-row .btn {
+    flex: 100%;
+  }
+}
+.try {
+  background: var(--paper);
+  min-height: 100svh;
+  color: var(--ink);
+}
+.try-in {
+  max-width: 1180px;
+  padding-top: 40px;
+  padding-bottom: 96px;
+}
+.try-home {
+  color: var(--ink);
+  margin-bottom: clamp(40px, 7vh, 72px);
+  display: inline-block;
+}
+.try-wait {
+  border: 1px dotted var(--hair-ink);
+  place-items: center;
+  min-height: clamp(320px, 44vh, 460px);
+  padding: 24px;
+  display: grid;
+}
+.try-problem {
+  text-align: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-weight: 300;
+  display: flex;
+}
+.try-fine {
+  color: var(--ink-mute);
+  margin: 18px 0 0;
+  font-size: 14px;
+  font-weight: 300;
+}
+.try-fine a {
+  color: var(--ink);
+  text-underline-offset: 3px;
+}

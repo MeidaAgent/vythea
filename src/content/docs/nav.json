@@ -1,0 +1,784 @@
+{
+ "groups": [
+  {
+   "title": "Getting started",
+   "items": [
+    {
+     "label": "Getting started",
+     "href": "/docs/getting-started",
+     "fold": false,
+     "children": []
+    }
+   ]
+  },
+  {
+   "title": "Using Vythea",
+   "items": [
+    {
+     "label": "The app",
+     "href": "/docs/app",
+     "fold": true,
+     "children": [
+      {
+       "label": "The parts of the window",
+       "href": "/docs/app/window/layout",
+       "fold": true,
+       "children": []
+      },
+      {
+       "label": "Asking first and modes",
+       "href": "/docs/app/permissions",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "What the agent can do",
+       "href": "/docs/app/tools",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Sessions",
+       "href": "/docs/app/sessions",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Memory",
+       "href": "/docs/app/memory",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Skills and your own commands",
+       "href": "/docs/app/skills",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Artifacts and previews",
+       "href": "/docs/app/artifacts",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Scheduled jobs and loops",
+       "href": "/docs/app/scheduled-jobs",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Helpers and workflows",
+       "href": "/docs/app/helpers",
+       "fold": false,
+       "children": []
+      }
+     ]
+    },
+    {
+     "label": "The terminal",
+     "href": "/docs/terminal",
+     "fold": true,
+     "children": [
+      {
+       "label": "Commands and options",
+       "href": "/docs/terminal/options",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Every slash command",
+       "href": "/docs/terminal/slash-commands",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Keys in the terminal",
+       "href": "/docs/terminal/keys",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Scripts and one-shot runs",
+       "href": "/docs/terminal/scripts",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "The screen",
+       "href": "/docs/terminal/tui/screen",
+       "fold": true,
+       "children": []
+      }
+     ]
+    },
+    {
+     "label": "The mobile app",
+     "href": "/docs/mobile/overview",
+     "fold": true,
+     "children": [
+      {
+       "label": "Signing in",
+       "href": "/docs/mobile/signing-in",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Chats",
+       "href": "/docs/mobile/chats",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Models",
+       "href": "/docs/mobile/models",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Working offline",
+       "href": "/docs/mobile/offline",
+       "fold": true,
+       "children": [
+        {
+         "label": "Adding a model",
+         "href": "/docs/mobile/add-model",
+         "fold": false,
+         "children": []
+        }
+       ]
+      },
+      {
+       "label": "Web search and photos",
+       "href": "/docs/mobile/search-and-photos",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Live Activity and notifications",
+       "href": "/docs/mobile/live-activity",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Your computer",
+       "href": "/docs/mobile/your-computer",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Code sessions",
+       "href": "/docs/mobile/code-sessions",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Settings",
+       "href": "/docs/mobile/settings",
+       "fold": false,
+       "children": []
+      }
+     ]
+    },
+    {
+     "label": "Gateways",
+     "href": "/docs/gateways",
+     "fold": false,
+     "children": []
+    },
+    {
+     "label": "Hosted models and credit",
+     "href": "/docs/hosted-models",
+     "fold": false,
+     "children": []
+    },
+    {
+     "label": "Local models",
+     "href": "/docs/local-models/overview",
+     "fold": true,
+     "children": [
+      {
+       "label": "Ollama",
+       "href": "/docs/local-models/ollama",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Other local servers",
+       "href": "/docs/local-models/other-servers",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Choosing a model",
+       "href": "/docs/local-models/choosing-a-model",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Working offline",
+       "href": "/docs/local-models/offline",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Serving your accounts to other tools",
+       "href": "/docs/local-models/local-endpoint",
+       "fold": false,
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Connect and extend",
+   "items": [
+    {
+     "label": "Telegram, Discord and Slack",
+     "href": "/docs/chat-apps",
+     "fold": false,
+     "children": []
+    },
+    {
+     "label": "MCP servers",
+     "href": "/docs/mcp",
+     "fold": false,
+     "children": []
+    },
+    {
+     "label": "Plugins, hooks and more",
+     "href": "/docs/plugins",
+     "fold": false,
+     "children": []
+    },
+    {
+     "label": "Wallet",
+     "href": "/docs/wallet",
+     "fold": false,
+     "children": []
+    }
+   ]
+  },
+  {
+   "title": "Cloud and teams",
+   "items": [
+    {
+     "label": "Vythea Cloud",
+     "href": "/docs/cloud",
+     "fold": true,
+     "children": [
+      {
+       "label": "Tasks in the cloud",
+       "href": "/docs/cloud/tasks",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Services",
+       "href": "/docs/cloud/services",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Web apps with a link",
+       "href": "/docs/cloud/web-apps",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Looking after them",
+       "href": "/docs/cloud/managing",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "A terminal in the browser",
+       "href": "/docs/cloud/terminal",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Telegram while your computer is off",
+       "href": "/docs/cloud/telegram",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "What Vythea Cloud costs",
+       "href": "/docs/cloud/costs",
+       "fold": false,
+       "children": []
+      },
+      {
+       "label": "Limits",
+       "href": "/docs/cloud/limits",
+       "fold": false,
+       "children": []
+      }
+     ]
+    },
+    {
+     "label": "Teams",
+     "href": "/docs/teams",
+     "fold": false,
+     "children": []
+    }
+   ]
+  },
+  {
+   "title": "Account and data",
+   "items": [
+    {
+     "label": "The dashboard",
+     "href": "/docs/dashboard",
+     "fold": false,
+     "children": []
+    },
+    {
+     "label": "VYTH",
+     "href": "/docs/vyth",
+     "fold": false,
+     "children": []
+    },
+    {
+     "label": "Your data",
+     "href": "/docs/data-and-privacy",
+     "fold": false,
+     "children": []
+    }
+   ]
+  },
+  {
+   "title": "Developers",
+   "items": [
+    {
+     "label": "Developers",
+     "href": "/docs/developers/overview",
+     "fold": true,
+     "children": [
+      {
+       "label": "Building on Vythea",
+       "href": "/docs/developers/building-on-vythea",
+       "fold": false,
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Help",
+   "items": [
+    {
+     "label": "Troubleshooting",
+     "href": "/docs/troubleshooting",
+     "fold": false,
+     "children": []
+    }
+   ]
+  }
+ ],
+ "index": [
+  {
+   "title": "Getting started",
+   "items": [
+    {
+     "href": "/docs/getting-started",
+     "title": "Getting started",
+     "desc": "Make an account, install Vythea, sign it in and ask it something."
+    }
+   ]
+  },
+  {
+   "title": "Using Vythea",
+   "items": [
+    {
+     "href": "/docs/app",
+     "title": "The app",
+     "desc": "The Vythea window: sessions, models, settings, and what differs on Windows, Linux and macOS."
+    },
+    {
+     "href": "/docs/app/window/layout",
+     "title": "The parts of the window",
+     "desc": "What is where in the Vythea window: the top bar, the sidebar, the chat, the composer, the status bar and the panel."
+    },
+    {
+     "href": "/docs/app/window/setup",
+     "title": "First start",
+     "desc": "The setup page the window shows when no model is connected yet."
+    },
+    {
+     "href": "/docs/app/window/panel",
+     "title": "The side panel",
+     "desc": "The Files, Changes and Jobs tabs beside the chat."
+    },
+    {
+     "href": "/docs/app/window/palette",
+     "title": "The command palette",
+     "desc": "One box to run an action, open a page, find a session, pick a model or attach a folder."
+    },
+    {
+     "href": "/docs/app/window/shortcuts",
+     "title": "Keyboard shortcuts",
+     "desc": "Every key in the Vythea window, part by part."
+    },
+    {
+     "href": "/docs/app/window/settings",
+     "title": "Settings",
+     "desc": "Every page of the window's Settings, and what each option does."
+    },
+    {
+     "href": "/docs/app/window/appearance",
+     "title": "Appearance",
+     "desc": "The window's themes, film grain and motion."
+    },
+    {
+     "href": "/docs/app/window/voice",
+     "title": "Voice",
+     "desc": "Speaking a message into the composer, and having replies read aloud."
+    },
+    {
+     "href": "/docs/app/window/quick-entry",
+     "title": "Quick Entry",
+     "desc": "A small bar to ask Vythea something from anywhere, without opening the window."
+    },
+    {
+     "href": "/docs/app/window/tray",
+     "title": "Tray, notifications and updates",
+     "desc": "The tray icon and its menu, what happens when you close the window, desktop notifications, and checking for a new version."
+    },
+    {
+     "href": "/docs/app/permissions",
+     "title": "Asking first and modes",
+     "desc": "When Vythea asks before it acts, the six modes, plan mode, and what is refused in every mode."
+    },
+    {
+     "href": "/docs/app/tools",
+     "title": "What the agent can do",
+     "desc": "The tools Vythea uses: files, commands, web search, reading documents, attaching pictures and controlling apps."
+    },
+    {
+     "href": "/docs/app/sessions",
+     "title": "Sessions",
+     "desc": "Finding, resuming, rewinding, branching, summarising and exporting conversations."
+    },
+    {
+     "href": "/docs/app/memory",
+     "title": "Memory",
+     "desc": "What Vythea remembers between sessions, when it saves, where it keeps it, and how to see and change it."
+    },
+    {
+     "href": "/docs/app/skills",
+     "title": "Skills and your own commands",
+     "desc": "Saved instructions Vythea can follow, and prompts you run as slash commands."
+    },
+    {
+     "href": "/docs/app/artifacts",
+     "title": "Artifacts and previews",
+     "desc": "The files Vythea makes for you, and previewing pages and pictures."
+    },
+    {
+     "href": "/docs/app/scheduled-jobs",
+     "title": "Scheduled jobs and loops",
+     "desc": "Prompts that run on a timer, sessions that keep working toward a goal, and being told when a run ends."
+    },
+    {
+     "href": "/docs/app/helpers",
+     "title": "Helpers and workflows",
+     "desc": "Vythea handing parts of a task to helpers, running workflows of many helpers, and working in a git worktree."
+    },
+    {
+     "href": "/docs/terminal",
+     "title": "The terminal",
+     "desc": "vythea in a terminal: how to start it, its options, and every slash command."
+    },
+    {
+     "href": "/docs/terminal/options",
+     "title": "Commands and options",
+     "desc": "Everything vythea takes on the command line: its commands and its options."
+    },
+    {
+     "href": "/docs/terminal/slash-commands",
+     "title": "Every slash command",
+     "desc": "All of the terminal's slash commands, grouped by what they do."
+    },
+    {
+     "href": "/docs/terminal/keys",
+     "title": "Keys in the terminal",
+     "desc": "Typing, editing, history, copying and stopping in the terminal."
+    },
+    {
+     "href": "/docs/terminal/scripts",
+     "title": "Scripts and one-shot runs",
+     "desc": "vythea -p: asking once from a script, its options, JSON output and running with nothing set up."
+    },
+    {
+     "href": "/docs/terminal/tui/screen",
+     "title": "The screen",
+     "desc": "What the terminal shows, from the top of the window to the footer under the box."
+    },
+    {
+     "href": "/docs/terminal/tui/approvals",
+     "title": "Approving tool calls",
+     "desc": "The card that asks before Vythea acts in the terminal: the diff, the answers, and questions from the model."
+    },
+    {
+     "href": "/docs/terminal/tui/pickers",
+     "title": "Lists and pickers",
+     "desc": "How lists, switches and sliders work in the terminal's box: picking a session, a model, a mode or an effort."
+    },
+    {
+     "href": "/docs/terminal/tui/selecting-and-copying",
+     "title": "Selecting and copying",
+     "desc": "Marking text with the mouse in the terminal, where the copy goes, and copying over ssh."
+    },
+    {
+     "href": "/docs/terminal/tui/scrolling",
+     "title": "Scrolling",
+     "desc": "Moving back through the conversation in the terminal with the wheel and the keys."
+    },
+    {
+     "href": "/docs/terminal/tui/pasting-and-pictures",
+     "title": "Pasting and pictures",
+     "desc": "Pasting long text into the terminal's box, and attaching pictures from the clipboard or by dragging them in."
+    },
+    {
+     "href": "/docs/terminal/tui/notifications",
+     "title": "Title and notifications",
+     "desc": "How the terminal's tab title and desktop notifications tell you Vythea is working, done, or waiting for you."
+    },
+    {
+     "href": "/docs/terminal/tui/look-and-feel",
+     "title": "Colours and text",
+     "desc": "The terminal's colours, what each means, turning colour off, and how wide text is laid out."
+    },
+    {
+     "href": "/docs/terminal/tui/terminal-support",
+     "title": "Terminals that work",
+     "desc": "Which terminals Vythea's screen works in on Windows, macOS and Linux, and what differs between them."
+    },
+    {
+     "href": "/docs/mobile/overview",
+     "title": "The mobile app",
+     "desc": "Vythea on iPhone and Android: what it does, and where each part is explained."
+    },
+    {
+     "href": "/docs/mobile/signing-in",
+     "title": "Signing in",
+     "desc": "Signing in to the mobile app, and signing out of other phones and browsers."
+    },
+    {
+     "href": "/docs/mobile/chats",
+     "title": "Chats",
+     "desc": "Starting chats, finding them again, and what holding a message or a chat does."
+    },
+    {
+     "href": "/docs/mobile/models",
+     "title": "Models",
+     "desc": "Choosing the model a chat uses: hosted models, and models on the iPhone."
+    },
+    {
+     "href": "/docs/mobile/offline",
+     "title": "Working offline",
+     "desc": "Chatting with no internet on an iPhone: Apple Intelligence and models you download to the phone."
+    },
+    {
+     "href": "/docs/mobile/add-model",
+     "title": "Adding a model",
+     "desc": "Adding a model from Hugging Face to run on your iPhone."
+    },
+    {
+     "href": "/docs/mobile/search-and-photos",
+     "title": "Web search and photos",
+     "desc": "How answers search the web, and sending photos in a chat."
+    },
+    {
+     "href": "/docs/mobile/live-activity",
+     "title": "Live Activity and notifications",
+     "desc": "Following an answer while you are in another app: the Dynamic Island, the lock screen and notifications."
+    },
+    {
+     "href": "/docs/mobile/your-computer",
+     "title": "Your computer",
+     "desc": "Pairing the phone with Vythea on your computer, chatting with it, and managing its accounts."
+    },
+    {
+     "href": "/docs/mobile/code-sessions",
+     "title": "Code sessions",
+     "desc": "Changing a GitHub repo from the phone: each message runs in Vythea Cloud and opens a pull request."
+    },
+    {
+     "href": "/docs/mobile/settings",
+     "title": "Settings",
+     "desc": "What each part of the mobile app's Settings does."
+    },
+    {
+     "href": "/docs/gateways",
+     "title": "Gateways",
+     "desc": "Where Vythea gets its models: your Vythea account, OpenAI, OpenRouter, Ollama or any OpenAI-compatible server."
+    },
+    {
+     "href": "/docs/hosted-models",
+     "title": "Hosted models and credit",
+     "desc": "Vythea's own models: how credit works, what Pro changes, and making images, speech and video."
+    },
+    {
+     "href": "/docs/local-models/overview",
+     "title": "Local models",
+     "desc": "Running a model on your own computer: why you might, and what you need."
+    },
+    {
+     "href": "/docs/local-models/ollama",
+     "title": "Ollama",
+     "desc": "Using a model you run with Ollama: install, pull a model, pick it in Vythea."
+    },
+    {
+     "href": "/docs/local-models/other-servers",
+     "title": "Other local servers",
+     "desc": "Adding LM Studio, llama.cpp, vLLM or any OpenAI-compatible server as a gateway of your own."
+    },
+    {
+     "href": "/docs/local-models/choosing-a-model",
+     "title": "Choosing a model",
+     "desc": "Which local model fits your memory, why it must call tools, and the context window."
+    },
+    {
+     "href": "/docs/local-models/offline",
+     "title": "Working offline",
+     "desc": "What Vythea can and cannot do with no internet connection."
+    },
+    {
+     "href": "/docs/local-models/local-endpoint",
+     "title": "Serving your accounts to other tools",
+     "desc": "The Local endpoint: an OpenAI-compatible address on this computer that other tools can use your connected models through."
+    }
+   ]
+  },
+  {
+   "title": "Connect and extend",
+   "items": [
+    {
+     "href": "/docs/chat-apps",
+     "title": "Telegram, Discord and Slack",
+     "desc": "Talking to Vythea from a chat app on your phone, and getting scheduled jobs' reports there."
+    },
+    {
+     "href": "/docs/mcp",
+     "title": "MCP servers",
+     "desc": "Giving Vythea more tools from MCP servers: adding them, signing in, and choosing which tools it may use."
+    },
+    {
+     "href": "/docs/plugins",
+     "title": "Plugins, hooks and more",
+     "desc": "Project instructions, plugins, hooks, language servers, and running Vythea inside Zed or JetBrains."
+    },
+    {
+     "href": "/docs/wallet",
+     "title": "Wallet",
+     "desc": "The wallet the agent pays from: paying sites that ask to be paid, sending money, and the limits you set."
+    }
+   ]
+  },
+  {
+   "title": "Cloud and teams",
+   "items": [
+    {
+     "href": "/docs/cloud",
+     "title": "Vythea Cloud",
+     "desc": "Run a task on Vythea's servers, keep a service running, or host a web app with its own link, all from the chat."
+    },
+    {
+     "href": "/docs/cloud/tasks",
+     "title": "Tasks in the cloud",
+     "desc": "Send a task to Vythea Cloud from the chat or the terminal, follow it, carry it on and stop it."
+    },
+    {
+     "href": "/docs/cloud/services",
+     "title": "Services",
+     "desc": "Keep a bot, a scheduler or a webhook receiver running in Vythea Cloud, day and night."
+    },
+    {
+     "href": "/docs/cloud/web-apps",
+     "title": "Web apps with a link",
+     "desc": "A web app Vythea builds in the cloud stays up at its own address, wakes on a visit and sleeps when nobody comes."
+    },
+    {
+     "href": "/docs/cloud/managing",
+     "title": "Looking after them",
+     "desc": "See what your services and web apps print, and take them down or bring them back, from the chat or the terminal."
+    },
+    {
+     "href": "/docs/cloud/terminal",
+     "title": "A terminal in the browser",
+     "desc": "Open Vythea itself, running in Vythea Cloud, in a terminal on the Cloud page."
+    },
+    {
+     "href": "/docs/cloud/telegram",
+     "title": "Telegram while your computer is off",
+     "desc": "Have Vythea Cloud answer your Telegram chat when this computer is off."
+    },
+    {
+     "href": "/docs/cloud/costs",
+     "title": "What Vythea Cloud costs",
+     "desc": "How tasks, services and web apps are charged, and where to see what you spent."
+    },
+    {
+     "href": "/docs/cloud/limits",
+     "title": "Limits",
+     "desc": "How much Vythea Cloud runs at once, how big and how long, and what it does not allow."
+    },
+    {
+     "href": "/docs/teams",
+     "title": "Teams",
+     "desc": "One credit pool for 2 to 5 people: seats, spending limits, the audit log, and who pays."
+    }
+   ]
+  },
+  {
+   "title": "Account and data",
+   "items": [
+    {
+     "href": "/docs/dashboard",
+     "title": "The dashboard",
+     "desc": "Your account on vythea.ai: what each page of the dashboard shows and does."
+    },
+    {
+     "href": "/docs/vyth",
+     "title": "VYTH",
+     "desc": "VYTH, Vythea's token: your wallet, turning VYTH into credit, and staking it for daily AI."
+    },
+    {
+     "href": "/docs/data-and-privacy",
+     "title": "Your data",
+     "desc": "What Vythea keeps on your computer, what it sends where, and adding tools from MCP servers."
+    }
+   ]
+  },
+  {
+   "title": "Developers",
+   "items": [
+    {
+     "href": "/docs/developers/overview",
+     "title": "Developers",
+     "desc": "Using Vythea from your own programs: scripts, editors and other agents."
+    },
+    {
+     "href": "/docs/developers/building-on-vythea",
+     "title": "Building on Vythea",
+     "desc": "Which way into Vythea fits your program, and what each one gives it."
+    }
+   ]
+  },
+  {
+   "title": "Help",
+   "items": [
+    {
+     "href": "/docs/troubleshooting",
+     "title": "Troubleshooting",
+     "desc": "Checking the setup with vythea doctor, what common errors mean, and where the logs are."
+    }
+   ]
+  }
+ ]
+}

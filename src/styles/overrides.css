@@ -1,0 +1,87 @@
+/* Adjustments on top of the ported stylesheet for the React build. */
+
+/* Hero headline: the sweep is driven by Framer Motion instead of the CSS keyframes. */
+.hero h1 .sl-i,
+.sl-i {
+  animation: none;
+  translate: none;
+}
+
+/* FAQ: height is animated by Framer Motion, so the grid-rows trick is switched off. */
+.faq-a {
+  display: block;
+  overflow: hidden;
+  transition: none;
+}
+
+/* Pricing figure swaps between monthly and yearly. */
+.tier-num {
+  display: inline-block;
+}
+
+/* Capability plates are tinted ink through their mask. */
+.cap-art {
+  background: var(--ink);
+}
+
+/* Footer language list uses buttons (only English copy ships in this build). */
+.foot-langs button {
+  color: var(--on-blue-mute);
+  letter-spacing: 0.06em;
+  text-transform: none;
+  cursor: pointer;
+  background: 0 0;
+  border: 0;
+  align-items: center;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0;
+  display: inline-flex;
+}
+.foot-langs button:hover,
+.foot-langs button[aria-current] {
+  color: var(--on-blue);
+}
+
+/* Not found */
+.lost {
+  min-height: 100svh;
+  place-items: center;
+  display: grid;
+}
+
+/* Placeholder where the original page mounts its on-chain swap widget. */
+.swap-note {
+  border: 1px dotted var(--hair-blue);
+  padding: clamp(18px, 2.4vw, 28px);
+}
+.swap-note p {
+  max-width: 44ch;
+  margin: 10px 0 0;
+  font-weight: 300;
+  line-height: 1.55;
+}
+
+/* Docs: mobile nav toggle state and unlinked index rows. */
+.docs-index .is-missing {
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-i {
+    transform: none !important;
+  }
+}
+
+/* The Vythea mark has long, thin flares, so it is drawn larger than the old glyph to read
+   at the same weight beside the wordmark and in the dock. */
+.wordmark .mark {
+  width: 1.9em;
+  height: 1.9em;
+  margin-block: -0.45em;
+  margin-inline: -0.3em 0.05em;
+}
+.dock-star {
+  width: 30px;
+  height: 30px;
+}
