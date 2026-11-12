@@ -2,8 +2,20 @@ import type { Metadata, Viewport } from "next";
 import { OS_DETECT_SCRIPT, SITE } from "@/lib/site";
 import "./globals.css";
 
+/**
+ * Absolute base for the share-preview image and other metadata URLs. Chat apps and social sites
+ * fetch og:image from this address, so it has to be a domain that really serves the site:
+ * NEXT_PUBLIC_SITE_URL if set (use it for a custom domain), else the Vercel production domain,
+ * else SITE.url for local builds.
+ */
+const base =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : SITE.url);
+
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE.url),
+  metadataBase: new URL(base),
   title: { default: SITE.title, template: "%s — Vythea" },
   description: SITE.description,
   icons: {
