@@ -14,8 +14,8 @@ const LABEL: Record<CheckStatus, string> = {
 /** How long a check may run before we call it failed and offer another go. */
 const GIVE_UP_MS = 30_000;
 
-const WIDTH = 128;
-const HEIGHT = 96;
+const WIDTH = 120;
+const HEIGHT = 104;
 
 /** The halo drawing: redrawn every frame, in the colour of the current status. */
 function Halo({ status }: { status: CheckStatus }) {

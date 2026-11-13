@@ -24,12 +24,15 @@ export const COLOR: Record<CheckStatus, string> = {
 
 let cache: Promise<Dot[]> | null = null;
 
-/** The mascot's alpha mask read once into dots. */
+/** Cells across the dot grid: the front-facing portrait needs more of them to keep her face. */
+const GRID = 56;
+
+/** The front-facing artwork (blue ink on white) read once into dots: the darker a spot, the stronger the dot. */
 export function loadDots(): Promise<Dot[]> {
   cache ??= new Promise((resolve) => {
     const img = new Image();
     img.onload = () => {
-      const N = 44;
+      const N = GRID;
       const c = document.createElement("canvas");
       c.width = N;
       c.height = N;
@@ -40,14 +43,20 @@ export function loadDots(): Promise<Dot[]> {
       const out: Dot[] = [];
       for (let r = 0; r < N; r++) {
         for (let q = 0; q < N; q++) {
-          const a = data[(r * N + q) * 4 + 3] / 255;
-          if (a >= 0.12) out.push({ u: (q + 0.5) / N, v: (r + 0.5) / N, a });
+          const at = (r * N + q) * 4;
+          const lum = (0.299 * data[at] + 0.587 * data[at + 1] + 0.114 * data[at + 2]) / 255;
+          const a = Math.min(1, (1 - lum) * (data[at + 3] / 255) * 1.5);
+          const u = (q + 0.5) / N;
+          const v = (r + 0.5) / N;
+          if (a >= 0.15) out.push({ u, v, a });
+          // Bare skin has no ink, so a faint fill over the face keeps it from reading as a hole.
+          else if (((u - 0.5) / 0.16) ** 2 + ((v - 0.56) / 0.14) ** 2 <= 1) out.push({ u, v, a: 0.24 });
         }
       }
       resolve(out);
     };
     img.onerror = () => resolve([]);
-    img.src = "/assets/vythea.png";
+    img.src = "/assets/vythea-front.png";
   });
   return cache;
 }
@@ -70,7 +79,7 @@ export function drawHalo(ctx: CanvasRenderingContext2D, w: number, h: number, f:
   const color = COLOR[status];
 
   const portrait = ease(f, "portrait", { idle: 0.45, verifying: 0.6, success: 0.9, error: 0.8 }[status], 5);
-  const cell = S / 44;
+  const cell = S / GRID;
   ctx.fillStyle = color;
   for (const d of dots) {
     ctx.globalAlpha = portrait * (0.5 + 0.5 * d.a);
@@ -78,11 +87,12 @@ export function drawHalo(ctx: CanvasRenderingContext2D, w: number, h: number, f:
     ctx.fillRect(ox + d.u * S - size / 2, d.v * S - size / 2, size, size);
   }
 
-  const cx = ox + 0.47 * S;
-  const cy = 0.19 * S;
-  const rx = 0.38 * S;
-  const ry = 0.12 * S;
-  const tilt = (8 * Math.PI) / 180;
+  // The ring sits over the crown of her hair, centred, matching the halo lines of the artwork.
+  const cx = ox + 0.5 * S;
+  const cy = 0.17 * S;
+  const rx = 0.42 * S;
+  const ry = 0.11 * S;
+  const tilt = (-3 * Math.PI) / 180;
   const ring = (a: number): [number, number] => {
     const ex = Math.cos(a) * rx;
     const ey = Math.sin(a) * ry;
