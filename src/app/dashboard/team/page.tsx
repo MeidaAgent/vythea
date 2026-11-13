@@ -13,7 +13,7 @@ export default async function Page() {
   }
 
   // Row-level security shows a person only their own team.
-  const { data: team } = await me.supabase.from("teams").select("id,name,owner_id,credits_usd,created_at").maybeSingle();
+  const { data: team } = await me.supabase.from("teams").select("id,name,owner_id,credits_usd,seats,plan_until,created_at").maybeSingle();
   let members: Member[] = [];
   let audit: Audit[] = [];
 
@@ -51,12 +51,23 @@ export default async function Page() {
       <div className="dash-top">
         <p className="micro">Team</p>
         <h1 className="dash-title">Team.</h1>
-        <p className="dash-sub">Share one credit pool with up to five people, and set a daily limit for each.</p>
+        <p className="dash-sub">Share one credit pool, set a daily limit for each person, and see what changed.</p>
       </div>
       <TeamPanel
         me={me.user.id}
         balance={Number(profile?.credits_usd ?? 0)}
-        team={team ? { id: team.id as string, name: team.name as string, owner: team.owner_id as string, pool: Number(team.credits_usd) } : null}
+        team={
+          team
+            ? {
+                id: team.id as string,
+                name: team.name as string,
+                owner: team.owner_id as string,
+                pool: Number(team.credits_usd),
+                seats: Number(team.seats),
+                until: team.plan_until && new Date(team.plan_until as string) > new Date() ? (team.plan_until as string) : null,
+              }
+            : null
+        }
         members={members}
         audit={audit}
       />

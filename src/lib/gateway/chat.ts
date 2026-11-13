@@ -20,6 +20,8 @@ type Key = {
   spent_today_usd: number;
   requests_last_minute: number;
   in_flight: number;
+  team_id: string | null;
+  team_paid: boolean | null;
 };
 
 type Model = {
@@ -167,7 +169,8 @@ export async function chatCompletions(req: Request): Promise<Response> {
 
   // 3. The key's own limits; a paid plan lifts the requests per minute and lowers the markup.
   const cfg = await settings(db);
-  const paid = key.plan === "pro" || key.plan === "team";
+  // Paid benefits come from the person's own Pro plan, or from a running Team plan on the team the key bills to.
+  const paid = key.plan === "pro" || key.plan === "team" || Boolean(key.team_id && key.team_paid);
   if (num(key.requests_last_minute) >= key.rpm_limit * (paid ? cfg.proRpm : 1)) {
     return fail(429, "rate_limit_exceeded", "Too many requests. Please slow down.", { "Retry-After": "10" });
   }

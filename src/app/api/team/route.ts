@@ -15,7 +15,9 @@ function why(message: string): { text: string; status: number } {
   if (m.includes("not the owner") || m.includes("not allowed")) return { text: "Only the team owner can do that.", status: 403 };
   if (m.includes("insufficient team credit")) return { text: "The team doesn't have that much credit.", status: 402 };
   if (m.includes("insufficient credit")) return { text: "You don't have that much credit.", status: 402 };
-  if (m.includes("team is full")) return { text: "The team is full (up to 5 people).", status: 409 };
+  if (m.includes("team is full")) return { text: "The team is full. Buy more seats to add people.", status: 409 };
+  if (m.includes("fewer seats than members")) return { text: "You have more members than that many seats.", status: 409 };
+  if (m.includes("unknown plan")) return { text: "Choose 2 to 5 seats, monthly or yearly.", status: 400 };
   if (m.includes("invite not valid")) return { text: "This invite link has expired or was already used.", status: 410 };
   if (m.includes("owner cannot be removed")) return { text: "The owner can't be removed.", status: 409 };
   if (m.includes("bad amount")) return { text: "Enter an amount.", status: 400 };
@@ -67,6 +69,16 @@ export async function POST(request: Request) {
         p_amount: Math.round(amount * 1e6) / 1e6,
       });
       return error ? fail(error.message) : reply({ pool: Number(data) });
+    }
+    case "plan": {
+      if (!teamId) return reply({ error: "You're not in a team." }, 404);
+      const seats = Number(body?.seats);
+      const period = body?.period;
+      if (!Number.isInteger(seats) || (period !== "month" && period !== "year")) {
+        return reply({ error: "Choose 2 to 5 seats, monthly or yearly." }, 400);
+      }
+      const { data, error } = await db.rpc("team_buy_plan", { p_team: teamId, p_user: user.id, p_seats: seats, p_period: period });
+      return error ? fail(error.message) : reply({ until: data });
     }
     case "limit": {
       if (!teamId || !uuid(body?.member)) return reply({ error: "Choose a member." }, 400);

@@ -59,12 +59,13 @@ const TIERS: Tier[] = [
     line: "One credit pool for the whole team.",
     feats: [
       "Everything in Free",
-      "$18 of shared credit per seat, monthly",
+      "Shared credit pool, paid for from your credit",
+      "Markup on hosted models cut from 20% to 10%",
       "Three times the requests a minute",
-      "Per-member spending limits",
-      "Audit log of every change",
+      "Per-member daily limits",
+      "Activity log of every change",
     ],
-    cta: { label: "Coming soon", href: "/docs/teams", soon: true },
+    cta: { label: "Get Team", href: "/dashboard/team", fill: false },
   },
 ];
 

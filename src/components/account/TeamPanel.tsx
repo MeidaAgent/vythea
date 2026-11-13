@@ -19,6 +19,7 @@ const SAYS: Record<string, (d: Record<string, unknown>) => string> = {
   "member.joined": () => "joined the team",
   "member.left": () => "left the team",
   "member.removed": () => "removed a member",
+  "plan.bought": (d) => `bought the Team plan: ${String(d.seats ?? "")} seats for 1 ${String(d.period ?? "")}, ${fmtUsd(Number(d.usd ?? 0))}`,
   "member.limit": (d) => (d.daily_limit_usd == null ? "removed a member's daily limit" : `set a member's daily limit to ${fmtUsd(Number(d.daily_limit_usd))}`),
 };
 
@@ -32,7 +33,7 @@ export function TeamPanel({
 }: {
   me: string;
   balance: number;
-  team: { id: string; name: string; owner: string; pool: number } | null;
+  team: { id: string; name: string; owner: string; pool: number; seats: number; until: string | null } | null;
   members: Member[];
   audit: Audit[];
 }) {
@@ -43,7 +44,12 @@ export function TeamPanel({
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
   const [confirming, setConfirming] = useState<string | null>(null);
+  const [seats, setSeats] = useState(team?.seats ?? 2);
+  const [period, setPeriod] = useState<"month" | "year">("month");
+  const [buying, setBuying] = useState(false);
   const isOwner = team?.owner === me;
+  const cap = team?.until ? team.seats : 2;
+  const price = (seats * (period === "year" ? 183.6 : 18)).toFixed(2);
 
   const call = async (body: Record<string, unknown>, okText?: string) => {
     setBusy(true);
@@ -65,8 +71,9 @@ export function TeamPanel({
       <section className="topup" aria-label="Create a team">
         <h2 className="dash-h2">Create a team</h2>
         <p className="acct-note">
-          A team shares one credit pool. You add credit to it from your own balance, invite up to four people with a
-          link, and set a daily limit for each. You can be in one team at a time.
+          A team shares one credit pool. You add credit to it from your own balance, invite people with a link, and
+          set a daily limit for each. A team can have two people; the Team plan raises that to five. You can be in
+          one team at a time.
         </p>
         <div className="cf">
           <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Team name" aria-label="Team name" maxLength={60} />
@@ -92,9 +99,49 @@ export function TeamPanel({
         </div>
         <div>
           <dt className="micro">Members</dt>
-          <dd>{members.length} of 5</dd>
+          <dd>{members.length} of {cap}</dd>
+        </div>
+        <div>
+          <dt className="micro">Plan</dt>
+          <dd>{team.until ? "Team" : "No plan"}</dd>
         </div>
       </dl>
+
+      <section className="topup" aria-label="Team plan">
+        <h2 className="dash-h2">Team plan</h2>
+        <p className="acct-note">
+          {team.until
+            ? `Team plan for ${team.seats} seats until ${new Date(team.until).toLocaleDateString("en", { day: "numeric", month: "short", year: "numeric" })}. Requests billed to the team get three times the requests a minute and a 10% markup instead of 20%. Buying again adds time to the end.`
+            : "Without a plan a team can have two people. The Team plan gives you 2 to 5 seats, three times the requests a minute and a 10% markup instead of 20% on hosted models, paid from the team's credit."}
+        </p>
+        {isOwner &&
+          (buying ? (
+            <>
+              <p className="acct-note">
+                {seats} seats for 1 {period}: <b>${price}</b> is taken from the team&apos;s credit ({fmtUsd(team.pool)}). It isn&apos;t refundable.
+              </p>
+              <p className="acct-more">
+                <button type="button" className="btn btn-fill btn-xs" disabled={busy} onClick={async () => { if (await call({ action: "plan", seats, period }, "The Team plan is active.")) setBuying(false); }}>
+                  {busy ? "Buying…" : `Buy for $${price}`}
+                </button>{" "}
+                <button type="button" className="btn btn-line btn-xs" disabled={busy} onClick={() => setBuying(false)}>Cancel</button>
+              </p>
+            </>
+          ) : (
+            <div className="topup-row" role="group" aria-label="Plan options">
+              {[2, 3, 4, 5].map((n) => (
+                <button key={n} type="button" className={`btn btn-xs ${seats === n ? "btn-fill" : "btn-line"}`} aria-pressed={seats === n} disabled={n < members.length} onClick={() => setSeats(n)}>
+                  {n} seats
+                </button>
+              ))}
+              <button type="button" className={`btn btn-xs ${period === "month" ? "btn-fill" : "btn-line"}`} aria-pressed={period === "month"} onClick={() => setPeriod("month")}>Monthly</button>
+              <button type="button" className={`btn btn-xs ${period === "year" ? "btn-fill" : "btn-line"}`} aria-pressed={period === "year"} onClick={() => setPeriod("year")}>Yearly</button>
+              <button type="button" className="btn btn-fill btn-xs" onClick={() => setBuying(true)}>
+                {team.until ? "Add time" : "Get Team"} · ${price}
+              </button>
+            </div>
+          ))}
+      </section>
 
       {isOwner && (
         <section className="topup" aria-label="Team credit">
@@ -153,7 +200,7 @@ export function TeamPanel({
             <CopyField value={link} label="Invite link" />
           ) : (
             <p className="acct-more">
-              <button type="button" className="btn btn-fill btn-xs" disabled={busy || members.length >= 5} onClick={async () => { const d = await call({ action: "invite" }); if (d && typeof d.link === "string") setLink(d.link); }}>
+              <button type="button" className="btn btn-fill btn-xs" disabled={busy || members.length >= cap} onClick={async () => { const d = await call({ action: "invite" }); if (d && typeof d.link === "string") setLink(d.link); }}>
                 {busy ? "Creating…" : "Create invite link"}
               </button>
             </p>
