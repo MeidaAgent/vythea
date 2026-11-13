@@ -26,7 +26,18 @@ type Mote = { x: number; y: number; s: number; born: number; sway: number };
  * hero scrolls away, part around the cursor, and now and then let go of a loose dot that floats up. If the canvas can't be used, the CSS mask
  * fallback shows instead.
  */
-export function InkCanvas() {
+export function InkCanvas({
+  place,
+  flip = false,
+  scatterOnScroll = true,
+}: {
+  /** Where the portrait sits: its right edge and its width, as fractions of the canvas width. */
+  place?: (canvasWidth: number) => { edge: number; width: number };
+  /** Mirror the portrait, so she faces the other way. */
+  flip?: boolean;
+  /** The hero scatters the dots as it scrolls away; other pages keep the portrait whole. */
+  scatterOnScroll?: boolean;
+} = {}) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [fallback, setFallback] = useState(false);
 
@@ -75,11 +86,12 @@ export function InkCanvas() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       // Same box as the CSS fallback: right half, inset 2.5%, contained, anchored bottom right.
-      const boxW = w * 0.5;
+      const spot = place?.(w) ?? { edge: 0.975, width: 0.5 };
+      const boxW = w * spot.width;
       const scale = Math.min(boxW / img.width, h / img.height);
       const iw = img.width * scale;
       const ih = img.height * scale;
-      const ox = w * 0.975 - iw;
+      const ox = w * spot.edge - iw;
       const oy = h - ih;
 
       const cols = Math.max(1, Math.floor(iw / density));
@@ -89,6 +101,10 @@ export function InkCanvas() {
       off.height = rows;
       const octx = off.getContext("2d", { willReadFrequently: true });
       if (!octx) return;
+      if (flip) {
+        octx.translate(cols, 0);
+        octx.scale(-1, 1);
+      }
       octx.drawImage(img, 0, 0, cols, rows);
       const data = octx.getImageData(0, 0, cols, rows).data;
 
@@ -214,7 +230,7 @@ export function InkCanvas() {
     const onScroll = () => {
       const span = Math.max(1, (hero?.offsetHeight ?? innerHeight) - innerHeight * 0.4);
       const e = Math.min(1, Math.max(0, scrollY / span));
-      scroll = still ? 0 : e * e;
+      scroll = still || !scatterOnScroll ? 0 : e * e;
       schedule();
     };
     const onResize = () => {
@@ -258,7 +274,7 @@ export function InkCanvas() {
       removeEventListener("pointermove", onPointer);
       document.documentElement.removeEventListener("pointerleave", onLeave);
     };
-  }, []);
+  }, [place, flip, scatterOnScroll]);
 
   return (
     <div className="hero-art" aria-hidden="true">
