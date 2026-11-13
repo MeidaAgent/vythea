@@ -67,13 +67,22 @@ async function upstreamFailure(res: Response) {
   if (res.status === 400 || res.status === 413 || res.status === 422) {
     return fail(400, "invalid_request", message || "The model did not accept this request.");
   }
-  if (res.status === 404) return fail(503, "model_unavailable", "That model isn't available right now.");
+  if (res.status === 404) {
+    return fail(503, "model_unavailable", "That model isn't available right now.", {
+      "X-Upstream-Status": "404",
+      "X-Upstream-Error": message.replace(/[^\x20-\x7e]/g, " ").slice(0, 160),
+    });
+  }
   if (res.status === 429)
     return fail(429, "rate_limit_exceeded", "The model is busy. Please try again shortly.", {
       "Retry-After": "10",
     });
   // Our own provider key or balance (401/402/403) is our problem, not the caller's.
-  return fail(503, "provider_unavailable", "The model provider is unavailable. Please try again shortly.");
+  // TEMPORARY diagnostics while the gateway is being brought up: the provider's status and a short reason.
+  return fail(503, "provider_unavailable", "The model provider is unavailable. Please try again shortly.", {
+    "X-Upstream-Status": String(res.status),
+    "X-Upstream-Error": message.replace(/[^\x20-\x7e]/g, " ").slice(0, 160),
+  });
 }
 
 /** Take the provider-specific parts out of an answer before it leaves. */
