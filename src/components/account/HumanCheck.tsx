@@ -98,6 +98,10 @@ export function HumanCheck({
   );
   const handleFail = useCallback(() => setFailed(true), []);
   const handleRendered = useCallback(() => setStarted(true), []);
+  // Cloudflare is sure about most visitors; for the rest it shows one tick box, which needs a word of
+  // explanation so it doesn't look out of place.
+  const [asking, setAsking] = useState(false);
+  const handleInteractive = useCallback((active: boolean) => setAsking(active), []);
 
   useEffect(() => {
     if (status !== "verifying") return;
@@ -115,8 +119,10 @@ export function HumanCheck({
       <div className="hc" data-status={status}>
         <Halo status={status} />
         <div className="hc-text" role="status" aria-live="polite">
-          <b>{LABEL[status]}</b>
-          <small>Protected by Cloudflare</small>
+          <b>{asking && status === "verifying" ? "One quick step needed" : LABEL[status]}</b>
+          <small>
+            {asking && status === "verifying" ? "Tick the box below to continue." : "Protected by Cloudflare"}
+          </small>
           {status === "error" && (
             <button type="button" className="btn btn-hollow btn-xs" onClick={retry}>
               Try again
@@ -124,7 +130,15 @@ export function HumanCheck({
           )}
         </div>
       </div>
-      <Turnstile onToken={handleToken} onFail={handleFail} onRendered={handleRendered} resetKey={round} />
+      <div className={asking ? "hc-ts asking" : "hc-ts"}>
+        <Turnstile
+          onToken={handleToken}
+          onFail={handleFail}
+          onRendered={handleRendered}
+          onInteractive={handleInteractive}
+          resetKey={round}
+        />
+      </div>
     </>
   );
 }

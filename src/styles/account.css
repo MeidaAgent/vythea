@@ -1102,3 +1102,8 @@
 .hc-text .btn {
   margin-top: 8px;
 }
+
+/* Cloudflare's own tick box, shown only when it has to ask; it sits right under the check. */
+.hc-ts.asking {
+  margin-top: 10px;
+}

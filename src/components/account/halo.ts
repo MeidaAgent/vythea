@@ -14,7 +14,7 @@ export type Frame = {
   s: Record<string, number>;
 };
 
-/** White at rest, the page's blue while checking, green when verified, red when it failed. */
+/** The halo: white at rest, the page's blue while checking, green when verified, red when it failed. */
 export const COLOR: Record<CheckStatus, string> = {
   idle: "#f2f4ff",
   verifying: "#3d6bff",
@@ -69,7 +69,7 @@ function ease(f: Frame, key: string, target: number, rate: number) {
 }
 
 /**
- * The halo check. The mascot and her ring take the colour of the status. A comet circles her head
+ * The halo check. She stays white; her ring takes the colour of the status. A comet circles her head
  * while it checks; when it is verified the ring closes and glows; when it fails the ring breaks.
  */
 export function drawHalo(ctx: CanvasRenderingContext2D, w: number, h: number, f: Frame) {
@@ -78,11 +78,11 @@ export function drawHalo(ctx: CanvasRenderingContext2D, w: number, h: number, f:
   const { t, status, dots, still } = f;
   const color = COLOR[status];
 
-  const portrait = ease(f, "portrait", { idle: 0.45, verifying: 0.6, success: 0.9, error: 0.8 }[status], 5);
+  // She stays white whatever the status; only the halo changes colour.
   const cell = S / GRID;
-  ctx.fillStyle = color;
+  ctx.fillStyle = COLOR.idle;
   for (const d of dots) {
-    ctx.globalAlpha = portrait * (0.5 + 0.5 * d.a);
+    ctx.globalAlpha = 0.9 * (0.5 + 0.5 * d.a);
     const size = Math.max(1, cell * 0.8 * Math.sqrt(d.a));
     ctx.fillRect(ox + d.u * S - size / 2, d.v * S - size / 2, size, size);
   }
