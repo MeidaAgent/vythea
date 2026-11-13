@@ -19,8 +19,22 @@ const has = (m: Method) => ENABLED.has(m);
 
 const LABEL: Record<Social, string> = { github: "GitHub", google: "Google" };
 
-// The mascot stands between the heading and the card on wide screens and fades behind everything on phones.
-const placeArt = (w: number) => (w > 860 ? { edge: 0.74, width: 0.48 } : { edge: 0.98, width: 0.95 });
+// Layout numbers shared with account.css: the heading's size, the card's width and the page gutter.
+const clamp = (min: number, v: number, max: number) => Math.min(max, Math.max(min, v));
+
+/**
+ * On wide screens the mascot gets exactly the gap between the heading and the card, so it never
+ * touches either. Below 1100px the page stacks and she fades in behind everything.
+ */
+const placeArt = (w: number) => {
+  if (w <= 1100) return { edge: 0.98, width: 0.95 };
+  const gutter = clamp(18, w * 0.032, 52);
+  const heading = clamp(48, w * 0.06, 88);
+  const textRight = gutter + Math.max(heading * 4.1, 320) + 24; // "ACCOUNT" is about 4.1 times the font size wide; the paragraph is 320px
+  const cardLeft = w - gutter - 420;
+  const edge = cardLeft - 16;
+  return { edge: edge / w, width: Math.max(edge - textRight, 200) / w };
+};
 
 function GitHubMark() {
   return (
@@ -127,20 +141,20 @@ export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
 
       <main id="main" className="lg-main">
         <div className="lg-copy">
-          <p className="micro">Sign in</p>
+          <p className="micro">Vythea {"//"} Sign in</p>
           <h1>
-            Welcome
+            Account
             <br />
-            back.
+            access.
           </h1>
-          <p>Your keys, usage and devices, in one account.</p>
+          <p>Manage your API keys, usage and devices from a single account.</p>
         </div>
 
         <div className="lg-card">
           <div className="lg-body">
             <p className="lg-kicker">{"// Account"}</p>
             <h2>Sign in to Vythea</h2>
-            <p className="lg-sub">Welcome back! Choose how you want to continue.</p>
+            <p className="lg-sub">Choose a method to continue.</p>
 
             {error && (
               <p className="lg-err" role="alert">
@@ -202,7 +216,7 @@ export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
                         type="email"
                         autoComplete="email"
                         required
-                        placeholder="you@example.com"
+                        placeholder="name@company.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                       />
@@ -211,7 +225,7 @@ export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
                         className="btn btn-fill lg-wide"
                         disabled={busy !== null || !email.trim()}
                       >
-                        {busy === "email" ? "Sending…" : "Email me a sign-in link"}
+                        {busy === "email" ? "Sending…" : "Send sign-in link"}
                       </button>
                     </form>
                   </>
@@ -220,7 +234,7 @@ export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
             )}
           </div>
           <p className="lg-foot">
-            New here? Signing in creates your account. <Link href="/">Back to the site</Link>
+            New to Vythea? Signing in creates your account. <Link href="/">Back to the site</Link>
           </p>
         </div>
       </main>

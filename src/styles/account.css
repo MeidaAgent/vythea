@@ -323,13 +323,13 @@
   font-family: var(--cond);
   text-transform: uppercase;
   margin: 0 0 24px;
-  font-size: clamp(64px, 9vw, 128px);
+  font-size: clamp(48px, 6vw, 88px);
   font-weight: 200;
   line-height: 0.92;
 }
 .lg-copy p:not(.micro) {
   color: var(--on-blue-mute);
-  max-width: 34ch;
+  max-width: 30ch;
   margin: 0;
   font-size: 18px;
   line-height: 1.4;
@@ -544,4 +544,168 @@
 /* <button> elements get the browser's grey unless told otherwise; hollow buttons stay see-through. */
 .lg-card .btn-hollow {
   background-color: transparent;
+}
+
+/* Below 1100px there is no room for heading, mascot and card side by side: stack them. */
+@media (width<=1100px) {
+  .lg-main {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    padding-top: 28px;
+  }
+  .lg-card {
+    max-width: 480px;
+  }
+}
+
+/* Models: search, provider chips and a card per model. */
+.mdl-bar {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin: 0 0 14px;
+  display: flex;
+}
+.mdl-search {
+  border: 1px solid var(--hair-ink);
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+  padding: 0 12px;
+  display: flex;
+}
+.mdl-search input {
+  font: inherit;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  outline: 0;
+  flex: 1;
+  min-width: 0;
+  padding: 11px 0;
+  font-size: 15px;
+}
+.mdl-search:focus-within {
+  border-color: var(--ink);
+}
+.mdl-chips {
+  flex-wrap: wrap;
+  gap: 8px;
+  display: flex;
+}
+.mdl-chip {
+  font: 400 10px var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--hair-ink);
+  gap: 8px;
+  padding: 9px 12px;
+  display: inline-flex;
+}
+.mdl-chip span {
+  opacity: 0.6;
+}
+.mdl-chip:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.mdl-chip[aria-pressed="true"] {
+  background: var(--blue);
+  color: var(--on-blue);
+  border-color: var(--blue);
+}
+.mdl-count {
+  color: var(--ink-mute);
+  margin: 0 0 14px;
+}
+.mdl-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+}
+.mdl-card {
+  border: 1px solid var(--hair-ink);
+  background: #f2f4ff08;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: 18px;
+  display: flex;
+}
+.mdl-prov {
+  color: var(--ink-mute);
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0;
+  display: flex;
+}
+.mdl-id {
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+.mdl-id code {
+  font-family: var(--mono);
+  word-break: break-all;
+  font-size: 14px;
+}
+.mdl-id button {
+  font: 400 10px var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--hair-ink);
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  display: inline-flex;
+}
+.mdl-id button:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.mdl-spec {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  display: grid;
+}
+.mdl-spec dt {
+  color: var(--ink-mute);
+  margin: 0 0 4px;
+}
+.mdl-spec dd {
+  margin: 0;
+  font-size: 18px;
+}
+.mdl-tags {
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  display: flex;
+}
+.mdl-tags span {
+  font: 400 10px var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--hair-ink);
+  color: var(--ink-mute);
+  padding: 4px 8px;
+}
+.mdl-price {
+  color: var(--ink-mute);
+  border-top: 1px dotted var(--hair-ink);
+  margin: auto 0 0;
+  padding-top: 12px;
+  font-size: 13px;
 }

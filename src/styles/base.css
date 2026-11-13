@@ -1262,7 +1262,7 @@ main {
   color: var(--on-blue-mute);
 }
 .foot-top {
-  grid-template-columns: 1.6fr repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1.6fr repeat(4, minmax(0, 1fr));
   gap: clamp(24px, 4vw, 56px);
   padding-bottom: clamp(40px, 6vh, 72px);
   display: grid;

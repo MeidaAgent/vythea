@@ -18,6 +18,7 @@ const COLUMNS = [
       { href: "/#faq", label: "FAQ" },
       { href: "/try", label: "Playground" },
       { href: "/dashboard/download", label: "Download" },
+      { href: "/dashboard", label: "Dashboard" },
     ],
   },
   {
@@ -30,10 +31,19 @@ const COLUMNS = [
     ],
   },
   {
+    title: "Legal",
+    links: [
+      { href: "/terms", label: "Terms of Service" },
+      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/refunds", label: "Refund Policy" },
+    ],
+  },
+  {
     title: "Company",
     links: [
       { href: "mailto:support@vythea.com", label: "Support" },
       { href: "mailto:hi@vythea.com", label: "Say hi" },
+      { href: "mailto:hi@vythea.com?subject=Partnership", label: "Partner with us" },
     ],
   },
 ] as const;
