@@ -18,6 +18,7 @@ const GROUPS: { name: string; items: Item[] }[] = [
       { to: "/dashboard/usage", label: "Usage", art: "cap-memory" },
       { to: "/dashboard/cloud", label: "Cloud", art: "cap-chat" },
       { to: "/dashboard/models", label: "Models", art: "cap-extend" },
+      { to: "/dashboard/keys", label: "API keys", art: "cap-auto", built: true },
     ],
   },
   {
