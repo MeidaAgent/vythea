@@ -48,6 +48,9 @@ export function Dock() {
       <Link href="/tokenomics" className="micro dock-l dock-more">
         Tokenomics
       </Link>
+      <Link href="/login" className="micro dock-l dock-acct">
+        Sign in
+      </Link>
       <a className="btn btn-fill btn-xs dock-cta" href="#platforms">
         Install
       </a>
