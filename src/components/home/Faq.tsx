@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 const QUESTIONS = [
   {
     q: "Does it need an account?",
-    a: "No. The app runs locally with your own model keys. An account is for hosted models, and for Vythea Cloud on Pro.",
+    a: "No. The app runs locally with your own model keys. An account is for hosted models, which you pay for from prepaid credit, and for Vythea Cloud once it opens.",
   },
   {
     q: "Where does my data live?",
@@ -15,7 +15,7 @@ const QUESTIONS = [
   },
   {
     q: "Which models can I use?",
-    a: "Any OpenAI-compatible endpoint, Anthropic, local models through Ollama or llama.cpp, and the hosted pool on Pro.",
+    a: "Any OpenAI-compatible endpoint, Anthropic, local models through Ollama or llama.cpp, and the hosted models, paid from your prepaid credit.",
   },
   {
     q: "Does it keep memory between sessions?",
@@ -27,7 +27,7 @@ const QUESTIONS = [
   },
   {
     q: "What is Vythea Cloud?",
-    a: "The same agent on our servers. Ask in the chat to run a task there, keep a service running, or give a web app its own link. It comes with Pro and is paid from your credit.",
+    a: "The same agent on our servers. Ask in the chat to run a task there, keep a service running, or give a web app its own link. It is not open yet; when it opens it will be paid from your credit.",
   },
   { q: "Is there a phone app?", a: "Native iPhone and Android apps are coming." },
   {

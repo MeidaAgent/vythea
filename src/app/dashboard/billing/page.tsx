@@ -35,7 +35,7 @@ export default async function BillingPage() {
       <div className="dash-top">
         <p className="micro">Billing</p>
         <h1 className="dash-title">Credit.</h1>
-        <p className="dash-sub">Paid models draw from your credit. Free-tier models don&apos;t.</p>
+        <p className="dash-sub">Hosted models draw from your credit, billed per request at the prices on the Models page.</p>
       </div>
 
       <dl className="acct-stats">

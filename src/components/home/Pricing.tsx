@@ -15,7 +15,7 @@ type Tier = {
   per: { month: string; year: string };
   line: string;
   feats: string[];
-  cta: { label: string; href: string; fill?: boolean };
+  cta: { label: string; href: string; fill?: boolean; soon?: boolean };
 };
 
 const TIERS: Tier[] = [
@@ -49,7 +49,7 @@ const TIERS: Tier[] = [
       "Three times the requests a minute",
       "Cancel any time",
     ],
-    cta: { label: "Start Pro", href: "/price", fill: true },
+    cta: { label: "Coming soon", href: "/price", fill: true, soon: true },
   },
   {
     art: "team",
@@ -65,7 +65,7 @@ const TIERS: Tier[] = [
       "Per-member spending limits",
       "Audit log of every change",
     ],
-    cta: { label: "Start a team", href: "/docs/teams" },
+    cta: { label: "Coming soon", href: "/docs/teams", soon: true },
   },
 ];
 
@@ -151,7 +151,11 @@ export function Pricing() {
                     <li key={f}>{f}</li>
                   ))}
                 </ul>
-                {tier.cta.href.startsWith("#") ? (
+                {tier.cta.soon ? (
+                  <span className="btn btn-invert" aria-disabled="true" style={{ opacity: 0.55, cursor: "default" }}>
+                    <span>{tier.cta.label}</span>
+                  </span>
+                ) : tier.cta.href.startsWith("#") ? (
                   <a className={`btn ${tier.cta.fill ? "btn-fill" : "btn-invert"}`} href={tier.cta.href}>
                     <span>{tier.cta.label}</span>
                   </a>
@@ -165,8 +169,8 @@ export function Pricing() {
           })}
         </div>
         <p className="micro tiers-note">
-          Prices in USD. Local use is free forever; you only pay for hosted models and Vythea Cloud, whose
-          compute is about $6 per GB a month from credit.
+          Prices in USD. Local use is free forever. Hosted models are available now as prepaid credit you
+          pay for as you use it; Pro, Team and Vythea Cloud open later.
         </p>
       </div>
     </section>
