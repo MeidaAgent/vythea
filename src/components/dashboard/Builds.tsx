@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { detectOs, type Os } from "@/lib/site";
 
-const SH = "curl -fsSL https://vythea.ai/install.sh | sh";
+const SH = "curl -fsSL https://vythea.com/install.sh | sh";
 
 const BUILDS: {
   id: Os;
@@ -30,7 +30,7 @@ const BUILDS: {
     name: "Windows",
     kind: ".zip",
     prompt: "PS>",
-    command: "irm https://vythea.ai/install.ps1 | iex",
+    command: "irm https://vythea.com/install.ps1 | iex",
     needs: "11, x64",
     then: "Paste it into PowerShell: it installs Vythea and walks you through setup.",
   },

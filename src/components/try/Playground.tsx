@@ -40,7 +40,7 @@ const SCRIPTS: { prompt: string; steps: Step[] }[] = [
       { kind: "out", text: "Rendered at 1440 and 390 wide. Form posts and answers 200." },
       { kind: "tool", text: "cloud  deploy --name ceramics-studio" },
       { kind: "out", text: "Awake in 3.1 s  ·  256 MB  ·  sleeps when nobody is looking" },
-      { kind: "done", text: "Live at ceramics-studio.vythea.si (example link, this is a recording)." },
+      { kind: "done", text: "Live at ceramics-studio.vythea.com (example link, this is a recording)." },
     ],
   },
   {

@@ -32,8 +32,8 @@ const COLUMNS = [
   {
     title: "Company",
     links: [
-      { href: "mailto:support@vythea.ai", label: "Support" },
-      { href: "mailto:hi@vythea.ai", label: "Say hi" },
+      { href: "mailto:support@vythea.com", label: "Support" },
+      { href: "mailto:hi@vythea.com", label: "Say hi" },
     ],
   },
 ] as const;
@@ -106,8 +106,8 @@ export function SiteFooter() {
                 <p className="micro foot-tag">Intelligence in Motion</p>
                 <p className="foot-note">
                   A small team, building in the open and open to work. If that sounds like you, say hi at{" "}
-                  <a className="foot-mail" href="mailto:hi@vythea.ai">
-                    hi@vythea.ai
+                  <a className="foot-mail" href="mailto:hi@vythea.com">
+                    hi@vythea.com
                   </a>
                 </p>
               </div>

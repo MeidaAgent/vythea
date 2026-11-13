@@ -93,7 +93,7 @@ export function DashShell({ children }: { children: ReactNode }) {
         <div className="side-links">
           <Link href="/docs">Guide</Link>
           <Link href="/benchmark">Benchmark</Link>
-          <a href="mailto:support@vythea.ai">Support</a>
+          <a href="mailto:support@vythea.com">Support</a>
         </div>
       </aside>
 

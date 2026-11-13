@@ -15,7 +15,7 @@ export default function DocsIndexPage() {
       <h1 className="docs-title">How to use Vythea</h1>
       <p className="docs-lede">
         From making an account to the terminal&apos;s every command. Something missing? Write to
-        support@vythea.ai.
+        support@vythea.com.
       </p>
       {docsIndex.map((group) => (
         <section className="docs-index-g" key={group.title}>

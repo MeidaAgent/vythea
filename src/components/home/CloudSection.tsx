@@ -14,7 +14,7 @@ const ITEMS = [
   {
     tag: "Apps",
     title: "A link of its own",
-    body: "A web app gets its own address on vythea.si, wakes on the first visit and sleeps when nobody is looking.",
+    body: "A web app gets its own address on vythea.com, wakes on the first visit and sleeps when nobody is looking.",
   },
 ];
 

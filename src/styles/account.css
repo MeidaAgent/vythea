@@ -336,9 +336,7 @@
 }
 .lg-card {
   color: var(--on-blue);
-  background-color: #020a4af0;
-  background-image: radial-gradient(#f2f4ff14 1px, #0000 1.2px);
-  background-size: 14px 14px;
+  background-color: #020a4a;
   border: 1px solid var(--hair-blue);
   width: 100%;
   position: relative;

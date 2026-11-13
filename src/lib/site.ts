@@ -1,6 +1,6 @@
 export const SITE = {
   name: "Vythea",
-  url: "https://vythea.ai",
+  url: "https://vythea.com",
   title: "Vythea — Your agent, with its own cloud and wallet",
   description:
     "Vythea is an AI agent with its own cloud and wallet: it works on your computer and in your terminal with any model or account, hosts what it builds at a live link, and pays for the APIs it needs. macOS, Linux and Windows.",
