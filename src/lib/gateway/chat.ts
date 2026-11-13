@@ -307,17 +307,22 @@ export async function chatCompletions(req: Request): Promise<Response> {
 
   const stream = new ReadableStream<Uint8Array>({
     async pull(controller) {
-      const { done, value } = await reader.read();
-      if (done) {
-        if (pending) controller.enqueue(encoder.encode(line(pending)));
-        await settle(usage, outputChars, "ok");
-        controller.close();
+      // Keep reading until there is something to send (a chunk may hold no complete line yet), or it ends.
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) {
+          if (pending) controller.enqueue(encoder.encode(line(pending)));
+          await settle(usage, outputChars, "ok");
+          controller.close();
+          return;
+        }
+        pending += decoder.decode(value, { stream: true });
+        const lines = pending.split("\n");
+        pending = lines.pop() ?? "";
+        if (lines.length === 0) continue;
+        for (const text of lines) controller.enqueue(encoder.encode(`${line(text)}\n`));
         return;
       }
-      pending += decoder.decode(value, { stream: true });
-      const lines = pending.split("\n");
-      pending = lines.pop() ?? "";
-      for (const text of lines) controller.enqueue(encoder.encode(`${line(text)}\n`));
     },
     async cancel(reason) {
       await reader.cancel(reason).catch(() => undefined);
