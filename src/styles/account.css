@@ -1058,3 +1058,14 @@
     padding: 12px 20px;
   }
 }
+
+/* The human check sits quietly under the form; its hint shows only when the check can't load. */
+.lg-ts {
+  margin: 0;
+}
+.lg-hint {
+  color: #ffb4ab;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+}

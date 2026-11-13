@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Mail, TriangleAlert, Wallet } from "lucide-react";
 import { Wordmark } from "@/components/brand/Wordmark";
+import { Turnstile } from "@/components/account/Turnstile";
 import { InkCanvas } from "@/components/home/InkCanvas";
 import { createClient } from "@/lib/supabase/client";
 
@@ -88,6 +89,21 @@ export function LoginCard({
   const [error, setError] = useState(failed ? "Sign-in didn't finish. Please try again." : "");
   const [email, setEmail] = useState("");
   const [sentTo, setSentTo] = useState("");
+  // The human check: a one-use token that email and wallet sign-in must carry.
+  const [captcha, setCaptcha] = useState<string | null>(null);
+  const [captchaReset, setCaptchaReset] = useState(0);
+  const [captchaBad, setCaptchaBad] = useState(false);
+
+  const onToken = useCallback((token: string | null) => {
+    setCaptcha(token);
+    if (token) setCaptchaBad(false);
+  }, []);
+  const onCaptchaFail = useCallback(() => setCaptchaBad(true), []);
+  /** A token works once; after each attempt, win or lose, ask for another. */
+  const spendCaptcha = () => {
+    setCaptcha(null);
+    setCaptchaReset((n) => n + 1);
+  };
 
   const back = () => `${location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
@@ -110,11 +126,17 @@ export function LoginCard({
       setError("No wallet found. Install MetaMask, or open this page inside your wallet's browser.");
       return;
     }
+    if (!captcha) {
+      setError("The security check isn't finished yet. Please wait a moment and try again.");
+      return;
+    }
     setBusy("wallet");
     const { error: err } = await createClient().auth.signInWithWeb3({
       chain: "ethereum",
       statement: "Sign in to Vythea. Signing is free and moves no funds.",
+      options: { captchaToken: captcha },
     });
+    spendCaptcha();
     if (err) {
       setError(
         /disabled|not enabled|not allowed|provider/i.test(err.message)
@@ -136,13 +158,14 @@ export function LoginCard({
   const mail = async (e: React.FormEvent) => {
     e.preventDefault();
     const address = email.trim();
-    if (!address || busy) return;
+    if (!address || busy || !captcha) return;
     setBusy("email");
     setError("");
     const { error: err } = await createClient().auth.signInWithOtp({
       email: address,
-      options: { emailRedirectTo: back(), shouldCreateUser: true },
+      options: { emailRedirectTo: back(), shouldCreateUser: true, captchaToken: captcha },
     });
+    spendCaptcha();
     setBusy(null);
     if (err) {
       setError(
@@ -254,11 +277,23 @@ export function LoginCard({
                       <button
                         type="submit"
                         className="btn btn-fill lg-wide"
-                        disabled={busy !== null || !email.trim()}
+                        disabled={busy !== null || !email.trim() || !captcha}
                       >
-                        {busy === "email" ? "Sending…" : "Send sign-in link"}
+                        {busy === "email" ? "Sending…" : captcha ? "Send sign-in link" : "Verifying…"}
                       </button>
                     </form>
+                  </>
+                )}
+
+                {(has("email") || has("wallet")) && (
+                  <>
+                    <Turnstile onToken={onToken} onFail={onCaptchaFail} resetKey={captchaReset} />
+                    {captchaBad && (
+                      <p className="lg-hint" role="status">
+                        The security check couldn&apos;t load. Turn off content blockers for this page and
+                        reload.
+                      </p>
+                    )}
                   </>
                 )}
               </>
