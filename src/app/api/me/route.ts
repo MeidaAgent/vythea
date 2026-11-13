@@ -12,7 +12,7 @@ export async function GET(request: Request) {
 
   const db = admin();
   const [{ data: profile }, { data: found }, { data: rules }, { data: claim }] = await Promise.all([
-    db.from("profiles").select("plan,credits_usd,free_used").eq("id", who.userId).single(),
+    db.from("profiles").select("plan,plan_until,credits_usd,free_used").eq("id", who.userId).single(),
     db.auth.admin.getUserById(who.userId),
     db.from("settings").select("key,value").in("key", ["free_model", "free_requests"]),
     db.from("free_claims").select("user_id").eq("user_id", who.userId).maybeSingle(),
@@ -32,7 +32,13 @@ export async function GET(request: Request) {
   return json({
     name: user ? displayName(user) : "Vythea user",
     email: user?.email ?? "",
-    plan: profile?.plan ?? "free",
+    // A paid plan counts only while it is running; after that the account is Free again.
+    plan:
+      (profile?.plan === "pro" || profile?.plan === "team") &&
+      profile.plan_until &&
+      new Date(profile.plan_until as string) > new Date()
+        ? profile.plan
+        : "free",
     // The app counts credit in cents.
     credits: Math.round(Number(profile?.credits_usd ?? 0) * 100),
     team: null,

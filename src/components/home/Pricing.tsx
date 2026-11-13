@@ -40,16 +40,15 @@ const TIERS: Tier[] = [
     month: 20,
     year: 199.2,
     per: { month: "per month", year: "per year" },
-    line: "Hosted models included.",
+    line: "Lower prices on hosted models.",
     feats: [
       "Everything in Free",
-      "$20 of hosted credit a month, or $240 at once on yearly",
-      "Lower prices on every hosted model",
-      "Vythea Cloud: tasks, services and web apps",
+      "Markup on hosted models cut from 20% to 10%",
       "Three times the requests a minute",
-      "Cancel any time",
+      "Paid from your credit, no card needed",
+      "Renew when you like, no automatic charges",
     ],
-    cta: { label: "Coming soon", href: "/price", fill: true, soon: true },
+    cta: { label: "Get Pro", href: "/dashboard/billing#plans", fill: true },
   },
   {
     art: "team",
@@ -169,8 +168,8 @@ export function Pricing() {
           })}
         </div>
         <p className="micro tiers-note">
-          Prices in USD. Local use is free forever. Hosted models are available now as prepaid credit you
-          pay for as you use it; Pro, Team and Vythea Cloud open later.
+          Prices in USD. Local use is free forever. Hosted models are paid from prepaid credit as you use them,
+          and Pro is bought from that same credit. Team and Vythea Cloud open later.
         </p>
       </div>
     </section>

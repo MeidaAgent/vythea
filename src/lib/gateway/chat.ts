@@ -42,6 +42,8 @@ const round6 = (n: number) => Math.round(n * 1e6) / 1e6;
 
 let cached: {
   markup: number;
+  markupPro: number;
+  proRpm: number;
   dataCollection: string;
   freeModel: string;
   freeRequests: number;
@@ -54,10 +56,12 @@ async function settings(db: Admin) {
   const { data } = await db
     .from("settings")
     .select("key,value")
-    .in("key", ["markup", "data_collection", "free_model", "free_requests"]);
+    .in("key", ["markup", "markup_pro", "pro_rpm_multiplier", "data_collection", "free_model", "free_requests"]);
   const rows = new Map((data ?? []).map((r) => [r.key as string, r.value as unknown]));
   cached = {
     markup: num(rows.get("markup"), 0.2),
+    markupPro: num(rows.get("markup_pro"), 0.1),
+    proRpm: Math.max(1, num(rows.get("pro_rpm_multiplier"), 3)),
     dataCollection: rows.get("data_collection") === "allow" ? "allow" : "deny",
     freeModel: typeof rows.get("free_model") === "string" ? (rows.get("free_model") as string) : "",
     freeRequests: Math.max(0, Math.floor(num(rows.get("free_requests"), 0))),
@@ -161,8 +165,10 @@ export async function chatCompletions(req: Request): Promise<Response> {
     return fail(503, "model_unavailable", "That model isn't available right now.");
   }
 
-  // 3. The key's own limits.
-  if (num(key.requests_last_minute) >= key.rpm_limit) {
+  // 3. The key's own limits; a paid plan lifts the requests per minute and lowers the markup.
+  const cfg = await settings(db);
+  const paid = key.plan === "pro" || key.plan === "team";
+  if (num(key.requests_last_minute) >= key.rpm_limit * (paid ? cfg.proRpm : 1)) {
     return fail(429, "rate_limit_exceeded", "Too many requests. Please slow down.", { "Retry-After": "10" });
   }
   if (num(key.spent_today_usd) >= num(key.daily_limit_usd)) {
@@ -190,7 +196,6 @@ export async function chatCompletions(req: Request): Promise<Response> {
   const reserve = Math.max(0.000001, Math.ceil(estimate * 1e6) / 1e6);
 
   // The free model takes one of the account's free requests first; once they are used up it is paid like any other.
-  const cfg = await settings(db);
   let isFree = false;
   let held: { data: unknown; error: { code?: string; message: string } | null } | null = null;
   if (cfg.freeModel && model.id === cfg.freeModel && cfg.freeRequests > 0) {
@@ -276,7 +281,7 @@ export async function chatCompletions(req: Request): Promise<Response> {
       p_in: Math.round(promptTokens),
       p_out: Math.round(completionTokens),
       p_provider_cost: round6(providerCost),
-      p_charged: isFree ? 0 : round6(providerCost * (1 + cfg.markup)),
+      p_charged: isFree ? 0 : round6(providerCost * (1 + (paid ? cfg.markupPro : cfg.markup))),
       p_status: status,
     });
     // The hold lapses by itself after 15 minutes, so a failure here never locks credit for good.

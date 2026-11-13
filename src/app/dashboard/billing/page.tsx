@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Soon } from "@/components/account/Soon";
 import { ClaimFree } from "@/components/account/ClaimFree";
+import { Plans } from "@/components/account/Plans";
 import { TopUp } from "@/components/account/TopUp";
 import { STAR_REPO, STAR_URL } from "@/lib/claim";
 import { requireUser } from "@/lib/account";
@@ -25,7 +26,7 @@ export default async function BillingPage({ searchParams }: { searchParams: Prom
   }
 
   const [profile, ledger, rules, claimRow] = await Promise.all([
-    me.supabase.from("profiles").select("credits_usd,free_used").eq("id", me.user.id).single(),
+    me.supabase.from("profiles").select("credits_usd,free_used,plan,plan_until").eq("id", me.user.id).single(),
     me.supabase
       .from("credit_ledger")
       .select("id,amount_usd,reason,created_at")
@@ -35,6 +36,8 @@ export default async function BillingPage({ searchParams }: { searchParams: Prom
     me.supabase.from("free_claims").select("github_login").eq("user_id", me.user.id).maybeSingle(),
   ]);
   const claimed = Boolean(claimRow.data);
+  const until = (profile.data?.plan_until as string | null) ?? null;
+  const onPro = profile.data?.plan === "pro" && until !== null && new Date(until) > new Date();
   const balance = Number(profile.data?.credits_usd ?? 0);
   const setting = new Map((rules.data ?? []).map((r) => [r.key as string, r.value as unknown]));
   const freeTotal = Math.max(0, Math.floor(Number(setting.get("free_requests") ?? 0)));
@@ -64,7 +67,7 @@ export default async function BillingPage({ searchParams }: { searchParams: Prom
         )}
         <div>
           <dt className="micro">Plan</dt>
-          <dd>Free</dd>
+          <dd>{onPro ? "Pro" : "Pay as you go"}</dd>
         </div>
       </dl>
 
@@ -73,6 +76,8 @@ export default async function BillingPage({ searchParams }: { searchParams: Prom
       )}
 
       <TopUp />
+
+      <Plans plan={onPro ? "pro" : "free"} until={onPro ? until : null} balance={balance} />
 
       <h2 className="dash-h2">History</h2>
       {entries.length === 0 ? (
