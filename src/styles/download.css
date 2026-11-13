@@ -547,3 +547,29 @@
   padding: 3px 6px;
   font-size: 9px;
 }
+
+/* Fit the screen: no scrolling into empty space. On wide screens the shell is exactly one screen
+   tall and only the content column scrolls, and only when its content is really longer. */
+.dash-main {
+  padding-bottom: 56px;
+}
+@media (width>860px) {
+  .dash-shell {
+    grid-template-rows: minmax(0, 1fr);
+    height: 100svh;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .side {
+    height: 100%;
+  }
+  .dash-col {
+    overscroll-behavior: contain;
+    min-height: 0;
+    overflow-y: auto;
+  }
+  .dash-main {
+    padding-top: clamp(28px, 4vw, 48px);
+  }
+}
