@@ -11,12 +11,22 @@ export async function GET(request: Request) {
   if (!who) return signedOut();
 
   const db = admin();
-  const [{ data: profile }, { data: found }] = await Promise.all([
-    db.from("profiles").select("plan,credits_usd").eq("id", who.userId).single(),
+  const [{ data: profile }, { data: found }, { data: rules }] = await Promise.all([
+    db.from("profiles").select("plan,credits_usd,free_used").eq("id", who.userId).single(),
     db.auth.admin.getUserById(who.userId),
+    db.from("settings").select("key,value").in("key", ["free_model", "free_requests"]),
   ]);
   const user = found?.user;
   await db.from("api_keys").update({ last_used_at: new Date().toISOString() }).eq("id", who.id);
+
+  // The free model counts as free to the app while the account still has free requests left.
+  const setting = new Map((rules ?? []).map((r) => [r.key as string, r.value as unknown]));
+  const freeModel = typeof setting.get("free_model") === "string" ? (setting.get("free_model") as string) : "";
+  const left = Math.max(0, Math.floor(Number(setting.get("free_requests") ?? 0)) - Number(profile?.free_used ?? 0));
+  const perks =
+    freeModel && left > 0
+      ? [{ id: "free-requests", name: "Free requests", model: freeModel, share: 100, available: true, left_requests: left }]
+      : [];
 
   return json({
     name: user ? displayName(user) : "Vythea user",
@@ -25,7 +35,7 @@ export async function GET(request: Request) {
     // The app counts credit in cents.
     credits: Math.round(Number(profile?.credits_usd ?? 0) * 100),
     team: null,
-    perks: [],
+    perks,
   });
 }
 

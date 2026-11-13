@@ -40,16 +40,27 @@ const isObject = (v: unknown): v is Json => typeof v === "object" && v !== null 
 const num = (v: unknown, fallback = 0) => (Number.isFinite(Number(v)) ? Number(v) : fallback);
 const round6 = (n: number) => Math.round(n * 1e6) / 1e6;
 
-let cached: { markup: number; dataCollection: string; at: number } | null = null;
+let cached: {
+  markup: number;
+  dataCollection: string;
+  freeModel: string;
+  freeRequests: number;
+  at: number;
+} | null = null;
 
-/** The markup and the privacy setting, read from the database and kept for a minute. */
+/** The markup, the privacy setting and the free allowance, read from the database and kept for a minute. */
 async function settings(db: Admin) {
   if (cached && Date.now() - cached.at < 60_000) return cached;
-  const { data } = await db.from("settings").select("key,value").in("key", ["markup", "data_collection"]);
+  const { data } = await db
+    .from("settings")
+    .select("key,value")
+    .in("key", ["markup", "data_collection", "free_model", "free_requests"]);
   const rows = new Map((data ?? []).map((r) => [r.key as string, r.value as unknown]));
   cached = {
     markup: num(rows.get("markup"), 0.2),
     dataCollection: rows.get("data_collection") === "allow" ? "allow" : "deny",
+    freeModel: typeof rows.get("free_model") === "string" ? (rows.get("free_model") as string) : "",
+    freeRequests: Math.max(0, Math.floor(num(rows.get("free_requests"), 0))),
     at: Date.now(),
   };
   return cached;
@@ -178,7 +189,20 @@ export async function chatCompletions(req: Request): Promise<Response> {
   const estimate = (inputTokens * num(model.input_per_m) + maxOut * num(model.output_per_m)) / 1e6;
   const reserve = Math.max(0.000001, Math.ceil(estimate * 1e6) / 1e6);
 
-  const held = await db.rpc("gateway_reserve", { p_key_id: key.key_id, p_max_cost: reserve });
+  // The free model takes one of the account's free requests first; once they are used up it is paid like any other.
+  const cfg = await settings(db);
+  let isFree = false;
+  let held: { data: unknown; error: { code?: string; message: string } | null } | null = null;
+  if (cfg.freeModel && model.id === cfg.freeModel && cfg.freeRequests > 0) {
+    const free = await db.rpc("gateway_reserve_free", { p_key_id: key.key_id, p_limit: cfg.freeRequests });
+    if (!free.error) {
+      isFree = true;
+      held = free;
+    } else if (free.error.code !== "P0003" && !/free allowance used/i.test(free.error.message)) {
+      return fail(503, "gateway_unavailable", "Please try again in a moment.");
+    }
+  }
+  if (!held) held = await db.rpc("gateway_reserve", { p_key_id: key.key_id, p_max_cost: reserve });
   if (held.error) {
     if (held.error.code === "P0002" || /insufficient credit/i.test(held.error.message)) {
       return fail(
@@ -194,7 +218,6 @@ export async function chatCompletions(req: Request): Promise<Response> {
 
   // 5. Forward it to the provider: our model name swapped for theirs, and nothing the caller sent that could
   // steer it to a different model or provider.
-  const cfg = await settings(db);
   const upstream: Json = {
     ...body,
     model: model.openrouter_id,
@@ -253,7 +276,7 @@ export async function chatCompletions(req: Request): Promise<Response> {
       p_in: Math.round(promptTokens),
       p_out: Math.round(completionTokens),
       p_provider_cost: round6(providerCost),
-      p_charged: round6(providerCost * (1 + cfg.markup)),
+      p_charged: isFree ? 0 : round6(providerCost * (1 + cfg.markup)),
       p_status: status,
     });
     // The hold lapses by itself after 15 minutes, so a failure here never locks credit for good.

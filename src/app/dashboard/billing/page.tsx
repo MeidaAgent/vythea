@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Soon } from "@/components/account/Soon";
 import { TopUp } from "@/components/account/TopUp";
 import { requireUser } from "@/lib/account";
+import { admin } from "@/lib/gateway/admin";
 import { fmtDateTime, fmtUsd } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Billing" };
@@ -20,15 +21,19 @@ export default async function BillingPage() {
     );
   }
 
-  const [profile, ledger] = await Promise.all([
-    me.supabase.from("profiles").select("credits_usd").eq("id", me.user.id).single(),
+  const [profile, ledger, rules] = await Promise.all([
+    me.supabase.from("profiles").select("credits_usd,free_used").eq("id", me.user.id).single(),
     me.supabase
       .from("credit_ledger")
       .select("id,amount_usd,reason,created_at")
       .order("created_at", { ascending: false })
       .limit(20),
+    admin().from("settings").select("key,value").in("key", ["free_model", "free_requests"]),
   ]);
   const balance = Number(profile.data?.credits_usd ?? 0);
+  const setting = new Map((rules.data ?? []).map((r) => [r.key as string, r.value as unknown]));
+  const freeTotal = Math.max(0, Math.floor(Number(setting.get("free_requests") ?? 0)));
+  const freeLeft = Math.max(0, freeTotal - Number(profile.data?.free_used ?? 0));
   const entries = (ledger.data ?? []) as Entry[];
 
   return (
@@ -44,6 +49,14 @@ export default async function BillingPage() {
           <dt className="micro">Balance</dt>
           <dd>{fmtUsd(balance)}</dd>
         </div>
+        {freeTotal > 0 && (
+          <div>
+            <dt className="micro">Free requests left</dt>
+            <dd>
+              {freeLeft} of {freeTotal}
+            </dd>
+          </div>
+        )}
         <div>
           <dt className="micro">Plan</dt>
           <dd>Free</dd>
