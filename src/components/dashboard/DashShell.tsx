@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { LangPicker } from "@/components/ui/LangPicker";
+import { fmtUsd } from "@/lib/format";
 
 type Item = { to: string; label: string; art: string; built?: boolean };
 
@@ -26,6 +27,7 @@ const GROUPS: { name: string; items: Item[] }[] = [
     items: [
       { to: "/dashboard/billing", label: "Billing", art: "plate-pro" },
       { to: "/dashboard/team", label: "Team", art: "cap-delegate" },
+      { to: "/dashboard/referrals", label: "Referrals", art: "plate-free" },
       { to: "/dashboard/devices", label: "Devices", art: "plat-linux" },
       { to: "/dashboard/settings", label: "Settings", art: "cap-auto" },
     ],
@@ -37,7 +39,17 @@ const GROUPS: { name: string; items: Item[] }[] = [
 ];
 const ITEMS = GROUPS.flatMap((g) => g.items);
 
-export function DashShell({ children }: { children: ReactNode }) {
+export function DashShell({
+  children,
+  name,
+  credit,
+}: {
+  children: ReactNode;
+  /** Who is signed in, for the foot of the sidebar; null when nobody is. */
+  name?: string | null;
+  /** Credit balance in USD for the sidebar card; null when nobody is signed in. */
+  credit?: number | null;
+}) {
   const pathname = usePathname().replace(/\/$/, "");
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
@@ -90,11 +102,27 @@ export function DashShell({ children }: { children: ReactNode }) {
             </div>
           ))}
         </nav>
+        {credit != null && (
+          <Link href="/dashboard/billing" className="side-cc">
+            <span className="side-cc-top">
+              <span className="micro">Credit</span>
+              <em>Free</em>
+            </span>
+            <strong>{fmtUsd(credit)}</strong>
+            <span className="micro">Add credit →</span>
+          </Link>
+        )}
         <div className="side-links">
           <Link href="/docs">Guide</Link>
           <Link href="/benchmark">Benchmark</Link>
           <a href="mailto:support@vythea.com">Support</a>
         </div>
+        {name && (
+          <Link href="/dashboard/settings" className="side-user">
+            <span aria-hidden="true">{name.replace(/^0x/i, "").charAt(0).toUpperCase()}</span>
+            {name}
+          </Link>
+        )}
       </aside>
 
       <div className="dash-col">

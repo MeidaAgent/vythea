@@ -10,10 +10,12 @@ export const metadata: Metadata = { title: "Sign in" };
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string; error?: string }>;
+  searchParams: Promise<{ next?: string; error?: string; mode?: string; ref?: string }>;
 }) {
-  const { next, error } = await searchParams;
+  const { next, error, mode, ref } = await searchParams;
   const to = safeNext(next);
+  // An invite code is a short run of letters and digits; anything else in the link is ignored.
+  const refCode = ref && /^[a-z0-9]{4,16}$/i.test(ref) ? ref.toLowerCase() : "";
 
   if (!hasSupabase) {
     return (
@@ -31,5 +33,12 @@ export default async function LoginPage({
   } = await (await createClient()).auth.getUser();
   if (user) redirect(to);
 
-  return <LoginCard next={to} failed={Boolean(error)} />;
+  return (
+    <LoginCard
+      next={to}
+      failed={Boolean(error)}
+      signup={mode === "signup" || Boolean(refCode)}
+      refCode={refCode}
+    />
+  );
 }

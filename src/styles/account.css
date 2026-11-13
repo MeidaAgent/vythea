@@ -709,3 +709,293 @@
   padding-top: 12px;
   font-size: 13px;
 }
+
+/* Sidebar: credit card and who is signed in. */
+.side-cc {
+  border: 1px solid var(--hair-ink);
+  background: #f2f4ff0a;
+  color: var(--ink);
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  text-decoration: none;
+  display: flex;
+}
+.side-cc:hover {
+  border-color: var(--ink);
+}
+.side-cc-top {
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+.side-cc .micro {
+  color: var(--ink-mute);
+}
+.side-cc em {
+  font: 400 10px var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blue-deep);
+  background: var(--on-blue);
+  padding: 3px 8px;
+  font-style: normal;
+}
+.side-cc strong {
+  font-family: var(--cond);
+  letter-spacing: 0.01em;
+  margin: 2px 0;
+  font-size: 34px;
+  font-weight: 300;
+  line-height: 1;
+}
+.side-user {
+  color: var(--ink);
+  border-top: 1px dotted var(--hair-ink);
+  align-items: center;
+  gap: 10px;
+  padding: 14px 4px 2px;
+  font-size: 14px;
+  text-decoration: none;
+  display: flex;
+}
+.side-user span {
+  background: var(--blue);
+  color: var(--on-blue);
+  border-radius: 50%;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+  display: grid;
+}
+
+/* Overview. */
+.ov-start {
+  border: 1px solid var(--hair-ink);
+  background: #f2f4ff08;
+  margin: 0 0 20px;
+  padding: 20px 24px 8px;
+}
+.ov-start-top {
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 6px;
+  display: flex;
+}
+.ov-start-top h2 {
+  color: var(--ink-mute);
+  margin: 0;
+}
+.ov-start ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ov-start li {
+  border-top: 1px dotted var(--hair-ink);
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  display: flex;
+}
+.ov-start li > div {
+  flex: 1;
+  min-width: 0;
+}
+.ov-start b {
+  font-weight: 500;
+  display: block;
+}
+.ov-start li p {
+  color: var(--ink-mute);
+  margin: 2px 0 0;
+  font-size: 14px;
+}
+.ov-n {
+  border: 1px solid var(--ink);
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  font: 400 12px var(--mono);
+  display: grid;
+}
+.ov-start li.done .ov-n {
+  background: var(--ink);
+  color: var(--blue-deep);
+}
+.ov-start li.done b {
+  opacity: 0.7;
+}
+.ov-stats {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+  margin: 0 0 14px;
+  display: grid;
+}
+.ov-card {
+  border: 1px solid var(--hair-ink);
+  background: #f2f4ff08;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 18px 16px;
+  display: flex;
+}
+.ov-card .micro {
+  color: var(--ink-mute);
+  margin: 0;
+  text-decoration: none;
+}
+.ov-card strong {
+  font-family: var(--cond);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin: 6px 0 0;
+  font-size: 44px;
+  font-weight: 200;
+  line-height: 1;
+}
+.ov-card small {
+  color: var(--ink-mute);
+  font-size: 13px;
+}
+.ov-card a.micro {
+  color: var(--ink);
+  margin-top: 8px;
+  text-decoration: none;
+}
+.ov-card a.micro:hover,
+.ov-panel header a:hover,
+.ov-links a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.ov-two {
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 14px;
+  margin: 0 0 14px;
+  display: grid;
+}
+.ov-panel {
+  border: 1px solid var(--hair-ink);
+  background: #f2f4ff08;
+  min-width: 0;
+  padding: 18px 20px 20px;
+}
+.ov-panel header {
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 16px;
+  display: flex;
+}
+.ov-panel header h2,
+.ov-panel header .micro {
+  color: var(--ink-mute);
+  margin: 0;
+}
+.ov-panel header a {
+  color: var(--ink);
+  text-decoration: none;
+}
+.ov-bars {
+  height: 150px;
+}
+.ov-panel .acct-axis {
+  margin-bottom: 0;
+}
+.ov-empty {
+  color: var(--ink-mute);
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.ov-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ov-list li {
+  border-top: 1px dotted var(--hair-ink);
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 11px 0;
+  font-size: 14px;
+  display: flex;
+}
+.ov-list li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.ov-list li > span:last-child {
+  color: var(--ink-mute);
+  text-align: end;
+  font-size: 13px;
+}
+.ov-list code {
+  font-family: var(--mono);
+  font-size: 13px;
+  word-break: break-all;
+}
+.ov-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ov-links li {
+  border-top: 1px dotted var(--hair-ink);
+  padding: 12px 0;
+}
+.ov-links li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.ov-links a {
+  font-family: var(--cond);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-size: 22px;
+  text-decoration: none;
+}
+@media (width<=900px) {
+  .ov-two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ov-start li {
+    flex-wrap: wrap;
+  }
+}
+
+/* Referrals: the invite link box. */
+.ref-link {
+  margin: 0 0 20px;
+  max-width: 720px;
+}
+.cf {
+  gap: 10px;
+  display: flex;
+}
+.cf input {
+  font: 400 14px var(--mono);
+  color: var(--ink);
+  background: #f2f4ff0d;
+  border: 1px solid var(--hair-ink);
+  border-radius: 0;
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+}
+.cf input:focus-visible {
+  border-color: var(--ink);
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+@media (width<=520px) {
+  .cf {
+    flex-direction: column;
+  }
+}

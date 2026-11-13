@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Mail, TriangleAlert, Wallet } from "lucide-react";
 import { Wordmark } from "@/components/brand/Wordmark";
@@ -64,8 +64,27 @@ function GoogleMark() {
   );
 }
 
-export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
+const REF_COOKIE = "vy_ref";
+
+export function LoginCard({
+  next,
+  failed,
+  signup,
+  refCode,
+}: {
+  next: string;
+  failed: boolean;
+  /** Arrived to register (an invite link or ?mode=signup): the wording says "create" instead of "sign in". */
+  signup: boolean;
+  /** The invite code from the link, already checked; "" when there is none. */
+  refCode: string;
+}) {
   const [busy, setBusy] = useState<Method | null>(null);
+
+  // Remember the invite for the half hour it takes to finish signing up, wherever the sign-in goes.
+  useEffect(() => {
+    if (refCode) document.cookie = `${REF_COOKIE}=${refCode}; max-age=1800; path=/; samesite=lax`;
+  }, [refCode]);
   const [error, setError] = useState(failed ? "Sign-in didn't finish. Please try again." : "");
   const [email, setEmail] = useState("");
   const [sentTo, setSentTo] = useState("");
@@ -105,6 +124,12 @@ export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
       setBusy(null);
       return;
     }
+    // The wallet flow doesn't pass through /auth/callback, so credit the invite here.
+    const invite = document.cookie.match(new RegExp(`${REF_COOKIE}=([a-z0-9]+)`))?.[1];
+    if (invite) {
+      await createClient().rpc("claim_referral", { p_code: invite });
+      document.cookie = `${REF_COOKIE}=; max-age=0; path=/`;
+    }
     location.assign(next);
   };
 
@@ -141,7 +166,9 @@ export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
 
       <main id="main" className="lg-main">
         <div className="lg-copy">
-          <p className="micro">Vythea {"//"} Sign in</p>
+          <p className="micro">
+            Vythea {"//"} {signup ? "Create account" : "Sign in"}
+          </p>
           <h1>
             Account
             <br />
@@ -153,8 +180,12 @@ export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
         <div className="lg-card">
           <div className="lg-body">
             <p className="lg-kicker">{"// Account"}</p>
-            <h2>Sign in to Vythea</h2>
-            <p className="lg-sub">Choose a method to continue.</p>
+            <h2>{signup ? "Create your account" : "Sign in to Vythea"}</h2>
+            <p className="lg-sub">
+              {signup
+                ? "Choose how you want to register. It takes a few seconds and needs no password."
+                : "Choose a method to continue."}
+            </p>
 
             {error && (
               <p className="lg-err" role="alert">
@@ -234,7 +265,15 @@ export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
             )}
           </div>
           <p className="lg-foot">
-            New to Vythea? Signing in creates your account. <Link href="/">Back to the site</Link>
+            {signup ? (
+              <>
+                Already have an account? <Link href="/login">Sign in</Link>
+              </>
+            ) : (
+              <>
+                New to Vythea? <Link href="/login?mode=signup">Create an account</Link>
+              </>
+            )}
           </p>
         </div>
       </main>

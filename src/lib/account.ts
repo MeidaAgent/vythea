@@ -38,3 +38,15 @@ export async function requireUser(next: string) {
   if (!user) redirect(`/login?next=${encodeURIComponent(next)}`);
   return { supabase, user, name: displayName(user) };
 }
+
+/** What the dashboard frame shows about the signed-in person, or null when nobody is signed in. */
+export async function getShellInfo(): Promise<{ name: string; credit: number } | null> {
+  if (!hasSupabase) return null;
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+  const { data } = await supabase.from("profiles").select("credits_usd").eq("id", user.id).single();
+  return { name: displayName(user), credit: Number(data?.credits_usd ?? 0) };
+}
