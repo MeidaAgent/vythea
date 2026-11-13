@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Soon } from "@/components/account/Soon";
+import { ClaimFree } from "@/components/account/ClaimFree";
 import { TopUp } from "@/components/account/TopUp";
+import { STAR_REPO, STAR_URL } from "@/lib/claim";
 import { requireUser } from "@/lib/account";
 import { admin } from "@/lib/gateway/admin";
 import { fmtDateTime, fmtUsd } from "@/lib/format";
@@ -9,7 +11,8 @@ export const metadata: Metadata = { title: "Billing" };
 
 type Entry = { id: number; amount_usd: number; reason: string; created_at: string };
 
-export default async function BillingPage() {
+export default async function BillingPage({ searchParams }: { searchParams: Promise<{ claim?: string }> }) {
+  const { claim } = await searchParams;
   const me = await requireUser("/dashboard/billing");
   if (!me) {
     return (
@@ -21,7 +24,7 @@ export default async function BillingPage() {
     );
   }
 
-  const [profile, ledger, rules] = await Promise.all([
+  const [profile, ledger, rules, claimRow] = await Promise.all([
     me.supabase.from("profiles").select("credits_usd,free_used").eq("id", me.user.id).single(),
     me.supabase
       .from("credit_ledger")
@@ -29,7 +32,9 @@ export default async function BillingPage() {
       .order("created_at", { ascending: false })
       .limit(20),
     admin().from("settings").select("key,value").in("key", ["free_model", "free_requests"]),
+    me.supabase.from("free_claims").select("github_login").eq("user_id", me.user.id).maybeSingle(),
   ]);
+  const claimed = Boolean(claimRow.data);
   const balance = Number(profile.data?.credits_usd ?? 0);
   const setting = new Map((rules.data ?? []).map((r) => [r.key as string, r.value as unknown]));
   const freeTotal = Math.max(0, Math.floor(Number(setting.get("free_requests") ?? 0)));
@@ -49,7 +54,7 @@ export default async function BillingPage() {
           <dt className="micro">Balance</dt>
           <dd>{fmtUsd(balance)}</dd>
         </div>
-        {freeTotal > 0 && (
+        {freeTotal > 0 && claimed && (
           <div>
             <dt className="micro">Free requests left</dt>
             <dd>
@@ -62,6 +67,10 @@ export default async function BillingPage() {
           <dd>Free</dd>
         </div>
       </dl>
+
+      {freeTotal > 0 && !claimed && (
+        <ClaimFree total={freeTotal} repoUrl={STAR_URL} repoName={STAR_REPO} result={claim} />
+      )}
 
       <TopUp />
 

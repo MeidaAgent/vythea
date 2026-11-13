@@ -11,10 +11,11 @@ export async function GET(request: Request) {
   if (!who) return signedOut();
 
   const db = admin();
-  const [{ data: profile }, { data: found }, { data: rules }] = await Promise.all([
+  const [{ data: profile }, { data: found }, { data: rules }, { data: claim }] = await Promise.all([
     db.from("profiles").select("plan,credits_usd,free_used").eq("id", who.userId).single(),
     db.auth.admin.getUserById(who.userId),
     db.from("settings").select("key,value").in("key", ["free_model", "free_requests"]),
+    db.from("free_claims").select("user_id").eq("user_id", who.userId).maybeSingle(),
   ]);
   const user = found?.user;
   await db.from("api_keys").update({ last_used_at: new Date().toISOString() }).eq("id", who.id);
@@ -24,7 +25,7 @@ export async function GET(request: Request) {
   const freeModel = typeof setting.get("free_model") === "string" ? (setting.get("free_model") as string) : "";
   const left = Math.max(0, Math.floor(Number(setting.get("free_requests") ?? 0)) - Number(profile?.free_used ?? 0));
   const perks =
-    freeModel && left > 0
+    freeModel && left > 0 && claim
       ? [{ id: "free-requests", name: "Free requests", model: freeModel, share: 100, available: true, left_requests: left }]
       : [];
 
