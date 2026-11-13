@@ -574,3 +574,12 @@
   color: var(--on-blue);
   background: #ffffff0f;
 }
+
+/* Language menu: a flag-style icon in front of each language. */
+.lang-menu button .flag {
+  opacity: 0.85;
+}
+.lang-menu button:hover .flag,
+.lang-menu button[aria-checked="true"] .flag {
+  opacity: 1;
+}

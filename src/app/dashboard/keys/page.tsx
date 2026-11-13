@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Keys } from "@/components/account/Keys";
+import { displayName } from "@/lib/account";
 import { createClient, hasSupabase } from "@/lib/supabase/server";
 import "@/styles/account.css";
 
@@ -29,7 +30,7 @@ export default async function KeysPage() {
     .is("revoked_at", null)
     .order("created_at", { ascending: false });
 
-  const username = String(user.user_metadata?.user_name ?? user.email ?? "your account");
+  const username = displayName(user);
 
   return (
     <div>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SignOutButton } from "@/components/account/SignOutButton";
 import { Soon } from "@/components/account/Soon";
-import { requireUser } from "@/lib/account";
+import { requireUser, signInMethods, walletAddress } from "@/lib/account";
 
 export const metadata: Metadata = { title: "Settings" };
 
@@ -18,6 +18,7 @@ export default async function SettingsPage() {
   }
 
   const avatar = me.user.user_metadata?.avatar_url as string | undefined;
+  const wallet = walletAddress(me.user);
   const joined = new Date(me.user.created_at).toLocaleDateString("en", {
     day: "numeric",
     month: "short",
@@ -29,14 +30,16 @@ export default async function SettingsPage() {
       <div className="dash-top">
         <p className="micro">Settings</p>
         <h1 className="dash-title">Your account.</h1>
-        <p className="dash-sub">You sign in with GitHub, so there is no password to manage here.</p>
+        <p className="dash-sub">
+          You sign in with GitHub, email or a wallet, so there is no password to manage here.
+        </p>
       </div>
 
       <div className="acct-profile">
         {avatar && <img src={avatar} alt="" width={64} height={64} referrerPolicy="no-referrer" />}
         <dl>
           <div>
-            <dt className="micro">GitHub</dt>
+            <dt className="micro">Account</dt>
             <dd>{me.name}</dd>
           </div>
           {me.user.email && (
@@ -45,6 +48,16 @@ export default async function SettingsPage() {
               <dd>{me.user.email}</dd>
             </div>
           )}
+          {wallet && (
+            <div>
+              <dt className="micro">Wallet</dt>
+              <dd>{wallet}</dd>
+            </div>
+          )}
+          <div>
+            <dt className="micro">Sign-in</dt>
+            <dd>{signInMethods(me.user).join(", ")}</dd>
+          </div>
           <div>
             <dt className="micro">Joined</dt>
             <dd>{joined}</dd>

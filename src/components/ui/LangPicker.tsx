@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Flag } from "@/components/ui/Flag";
 import { LANGUAGES } from "@/lib/site";
 import { useLanguage } from "@/lib/use-language";
 
@@ -36,18 +37,7 @@ export function LangPicker() {
         aria-label={`Language: ${current.label}`}
         onClick={() => setOpen((v) => !v)}
       >
-        <svg
-          viewBox="0 0 30 20"
-          width={22}
-          height={15}
-          className="flag"
-          fill="none"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
-          <rect x=".5" y=".5" width="29" height="19" strokeWidth="1" />
-          <path d="M3 6h24M3 10h24M3 14h16" strokeWidth="1.4" />
-        </svg>
+        <Flag code={current.code} />
         <span className="micro">{current.short}</span>
       </button>
       <AnimatePresence>
@@ -72,6 +62,7 @@ export function LangPicker() {
                     setOpen(false);
                   }}
                 >
+                  <Flag code={l.code} />
                   {l.label}
                 </button>
               </li>

@@ -2,21 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { TriangleAlert } from "lucide-react";
+import { Mail, TriangleAlert, Wallet } from "lucide-react";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { InkCanvas } from "@/components/home/InkCanvas";
 import { createClient } from "@/lib/supabase/client";
 
-type Provider = "github" | "google";
+type Method = "github" | "google" | "wallet" | "email";
+type Social = "github" | "google";
 
-// Which sign-in methods are switched on. Add "google" here (via NEXT_PUBLIC_AUTH_PROVIDERS) only
-// after Google is enabled in Supabase; a button that can't work is worse than no button.
-const ENABLED = (process.env.NEXT_PUBLIC_AUTH_PROVIDERS ?? "github")
-  .split(",")
-  .map((p) => p.trim())
-  .filter((p): p is Provider => p === "github" || p === "google");
+// Which sign-in methods are shown. Each one also has to be switched on in Supabase
+// (Authentication > Sign In / Providers); set NEXT_PUBLIC_AUTH_PROVIDERS to change the list.
+const ENABLED = new Set(
+  (process.env.NEXT_PUBLIC_AUTH_PROVIDERS ?? "github,wallet,email").split(",").map((p) => p.trim()),
+);
+const has = (m: Method) => ENABLED.has(m);
 
-const LABEL: Record<Provider, string> = { github: "GitHub", google: "Google" };
+const LABEL: Record<Social, string> = { github: "GitHub", google: "Google" };
 
 // The mascot stands between the heading and the card on wide screens and fades behind everything on phones.
 const placeArt = (w: number) => (w > 860 ? { edge: 0.74, width: 0.48 } : { edge: 0.98, width: 0.95 });
@@ -50,15 +51,19 @@ function GoogleMark() {
 }
 
 export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
-  const [busy, setBusy] = useState<Provider | null>(null);
+  const [busy, setBusy] = useState<Method | null>(null);
   const [error, setError] = useState(failed ? "Sign-in didn't finish. Please try again." : "");
+  const [email, setEmail] = useState("");
+  const [sentTo, setSentTo] = useState("");
 
-  const signIn = async (provider: Provider) => {
+  const back = () => `${location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+
+  const social = async (provider: Social) => {
     setBusy(provider);
     setError("");
     const { error: err } = await createClient().auth.signInWithOAuth({
       provider,
-      options: { redirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
+      options: { redirectTo: back() },
     });
     if (err) {
       setError(`Couldn't reach ${LABEL[provider]}. Please try again.`);
@@ -66,7 +71,52 @@ export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
     }
   };
 
-  const many = ENABLED.length > 1;
+  const wallet = async () => {
+    setError("");
+    if (!(window as unknown as { ethereum?: unknown }).ethereum) {
+      setError("No wallet found. Install MetaMask, or open this page inside your wallet's browser.");
+      return;
+    }
+    setBusy("wallet");
+    const { error: err } = await createClient().auth.signInWithWeb3({
+      chain: "ethereum",
+      statement: "Sign in to Vythea. Signing is free and moves no funds.",
+    });
+    if (err) {
+      setError(
+        /disabled|not enabled|not allowed|provider/i.test(err.message)
+          ? "Wallet sign-in isn't switched on yet."
+          : "The wallet request was cancelled or failed. Please try again.",
+      );
+      setBusy(null);
+      return;
+    }
+    location.assign(next);
+  };
+
+  const mail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const address = email.trim();
+    if (!address || busy) return;
+    setBusy("email");
+    setError("");
+    const { error: err } = await createClient().auth.signInWithOtp({
+      email: address,
+      options: { emailRedirectTo: back(), shouldCreateUser: true },
+    });
+    setBusy(null);
+    if (err) {
+      setError(
+        err.status === 429
+          ? "Too many requests. Wait a minute and try again."
+          : "Couldn't send the email. Check the address and try again.",
+      );
+      return;
+    }
+    setSentTo(address);
+  };
+
+  const socials = (["github", "google"] as const).filter(has);
 
   return (
     <div className="lg-wrap">
@@ -88,8 +138,9 @@ export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
 
         <div className="lg-card">
           <div className="lg-body">
+            <p className="lg-kicker">{"// Account"}</p>
             <h2>Sign in to Vythea</h2>
-            <p>Welcome back! Please sign in to continue</p>
+            <p className="lg-sub">Welcome back! Choose how you want to continue.</p>
 
             {error && (
               <p className="lg-err" role="alert">
@@ -98,21 +149,75 @@ export function LoginCard({ next, failed }: { next: string; failed: boolean }) {
               </p>
             )}
 
-            <div className="lg-providers" style={{ "--n": many ? ENABLED.length : 1 } as React.CSSProperties}>
-              {ENABLED.map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  className="lg-p"
-                  onClick={() => signIn(p)}
-                  disabled={busy !== null}
-                  aria-label={`Continue with ${LABEL[p]}`}
-                >
-                  {p === "github" ? <GitHubMark /> : <GoogleMark />}
-                  {!many && <span>{busy === p ? "Opening…" : `Continue with ${LABEL[p]}`}</span>}
+            {sentTo ? (
+              <div className="lg-sent" role="status">
+                <Mail size={20} aria-hidden="true" />
+                <div>
+                  <b>Check your inbox</b>
+                  <p>
+                    We sent a sign-in link to <strong>{sentTo}</strong>. Open it on this device to continue.
+                  </p>
+                </div>
+                <button type="button" className="btn btn-hollow btn-xs" onClick={() => setSentTo("")}>
+                  Use a different email
                 </button>
-              ))}
-            </div>
+              </div>
+            ) : (
+              <>
+                <div className="lg-stack">
+                  {socials.map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      className="btn btn-hollow lg-wide"
+                      onClick={() => social(p)}
+                      disabled={busy !== null}
+                    >
+                      {p === "github" ? <GitHubMark /> : <GoogleMark />}
+                      {busy === p ? "Opening…" : `Continue with ${LABEL[p]}`}
+                    </button>
+                  ))}
+                  {has("wallet") && (
+                    <button
+                      type="button"
+                      className="btn btn-hollow lg-wide"
+                      onClick={wallet}
+                      disabled={busy !== null}
+                    >
+                      <Wallet aria-hidden="true" />
+                      {busy === "wallet" ? "Waiting for wallet…" : "Continue with wallet"}
+                    </button>
+                  )}
+                </div>
+
+                {has("email") && (
+                  <>
+                    <p className="lg-or">or</p>
+                    <form className="lg-field" onSubmit={mail}>
+                      <label htmlFor="lg-email" className="micro">
+                        Email address
+                      </label>
+                      <input
+                        id="lg-email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                      <button
+                        type="submit"
+                        className="btn btn-fill lg-wide"
+                        disabled={busy !== null || !email.trim()}
+                      >
+                        {busy === "email" ? "Sending…" : "Email me a sign-in link"}
+                      </button>
+                    </form>
+                  </>
+                )}
+              </>
+            )}
           </div>
           <p className="lg-foot">
             New here? Signing in creates your account. <Link href="/">Back to the site</Link>
