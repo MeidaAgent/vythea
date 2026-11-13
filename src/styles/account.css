@@ -206,3 +206,91 @@
   margin: 0;
   display: flex;
 }
+
+/* Revoke confirmation, usage chart, tables. */
+.acct-list small {
+  display: block;
+}
+.acct-confirm {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px 10px;
+  max-width: 100%;
+  display: flex;
+}
+.acct-confirm span {
+  color: var(--ink);
+  flex: 1 1 100%;
+  font-size: 13px;
+  text-align: right;
+}
+.acct-bars {
+  border-bottom: 1px solid var(--hair-ink);
+  align-items: flex-end;
+  gap: 3px;
+  height: 120px;
+  margin: 0;
+  display: flex;
+}
+.acct-bars span {
+  background: var(--hair-ink);
+  flex: 1;
+  min-width: 0;
+}
+.acct-bars span.on {
+  background: var(--blue);
+}
+.acct-axis {
+  color: var(--ink-mute);
+  font-family: var(--mono);
+  justify-content: space-between;
+  margin: 6px 0 28px;
+  font-size: 11px;
+  display: flex;
+}
+.acct-scroll {
+  overflow-x: auto;
+}
+.acct-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 560px;
+  font-size: 14px;
+}
+.acct-table th {
+  font-family: var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  text-align: start;
+  border-bottom: 1px solid var(--hair-ink);
+  padding: 10px 12px 10px 0;
+  font-size: 10px;
+  font-weight: 400;
+}
+.acct-table td {
+  border-bottom: 1px solid var(--hair-ink);
+  vertical-align: top;
+  padding: 14px 12px 14px 0;
+}
+.acct-table td small {
+  color: var(--ink-mute);
+  font-size: 12px;
+  display: block;
+}
+.acct-table code {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+/* Let a key row wrap so the confirmation never squeezes the key's details. */
+.acct-list li {
+  flex-wrap: wrap;
+}
+.acct-list .grow {
+  flex: 1 1 200px;
+}
+.acct-confirm {
+  flex: 1 1 260px;
+}

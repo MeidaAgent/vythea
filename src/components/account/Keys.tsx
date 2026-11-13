@@ -10,6 +10,8 @@ export type KeyRow = {
   prefix: string;
   created_at: string;
   last_used_at: string | null;
+  rpm_limit: number;
+  daily_limit_usd: number;
 };
 
 const day = (iso: string) =>
@@ -23,11 +25,13 @@ export function Keys({ initial, username }: { initial: KeyRow[]; username: strin
   const [copied, setCopied] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  /** The key whose Revoke button was pressed and is waiting for a yes or no. */
+  const [confirming, setConfirming] = useState<string | null>(null);
 
   const reload = async () => {
     const { data } = await createClient()
       .from("api_keys")
-      .select("id,name,prefix,created_at,last_used_at")
+      .select("id,name,prefix,created_at,last_used_at,rpm_limit,daily_limit_usd")
       .is("revoked_at", null)
       .order("created_at", { ascending: false });
     if (data) setKeys(data);
@@ -55,7 +59,7 @@ export function Keys({ initial, username }: { initial: KeyRow[]; username: strin
   };
 
   const revoke = async (row: KeyRow) => {
-    if (!confirm(`Revoke "${row.name}"? Anything using it stops working.`)) return;
+    setConfirming(null);
     const { error: err } = await createClient().rpc("revoke_api_key", { p_id: row.id });
     if (err) setError("Couldn't revoke the key. Try again.");
     else await reload();
@@ -139,10 +143,25 @@ export function Keys({ initial, username }: { initial: KeyRow[]; username: strin
                   {k.prefix}… · created {day(k.created_at)} ·{" "}
                   {k.last_used_at ? `used ${day(k.last_used_at)}` : "not used yet"}
                 </small>
+                <small>
+                  {k.rpm_limit} requests/min · ${Number(k.daily_limit_usd).toFixed(2)}/day limit
+                </small>
               </div>
-              <button type="button" className="btn btn-line btn-xs" onClick={() => revoke(k)}>
-                Revoke
-              </button>
+              {confirming === k.id ? (
+                <div className="acct-confirm" role="alertdialog" aria-label={`Revoke ${k.name}?`}>
+                  <span>Revoke &ldquo;{k.name}&rdquo;? Anything using it stops working.</span>
+                  <button type="button" className="btn btn-ink btn-xs" onClick={() => revoke(k)}>
+                    Yes, revoke
+                  </button>
+                  <button type="button" className="btn btn-line btn-xs" onClick={() => setConfirming(null)}>
+                    Keep it
+                  </button>
+                </div>
+              ) : (
+                <button type="button" className="btn btn-line btn-xs" onClick={() => setConfirming(k.id)}>
+                  Revoke
+                </button>
+              )}
             </li>
           ))}
         </ul>
