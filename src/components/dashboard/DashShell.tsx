@@ -8,8 +8,8 @@ import { LangPicker } from "@/components/ui/LangPicker";
 
 type Item = { to: string; label: string; art: string; built?: boolean };
 
-// The original dashboard's sections. Only Download is a page in this build; the rest need an
-// account and a backend, so they are listed but not linked.
+// The dashboard sections. Overview, Settings and API keys do real work; the others are pages that say
+// plainly when the feature opens.
 const GROUPS: { name: string; items: Item[] }[] = [
   {
     name: "Workspace",
@@ -80,21 +80,11 @@ export function DashShell({ children }: { children: ReactNode }) {
               <p className="side-gname">{group.name}</p>
               {group.items.map((item) => {
                 const n = <span className="side-n">{String(ITEMS.indexOf(item) + 1).padStart(2, "0")}</span>;
-                return item.built ? (
+                return (
                   <Link key={item.to} href={item.to} className={`side-link${item === here ? " on" : ""}`}>
                     {n}
                     {item.label}
                   </Link>
-                ) : (
-                  <span
-                    key={item.to}
-                    className="side-link"
-                    aria-disabled="true"
-                    style={{ opacity: 0.45, cursor: "default" }}
-                  >
-                    {n}
-                    {item.label}
-                  </span>
                 );
               })}
             </div>
