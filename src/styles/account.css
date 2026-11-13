@@ -999,3 +999,62 @@
     flex-direction: column;
   }
 }
+
+/* Tablet and phone: one clean screen. The big heading steps aside (the card has its own title, and
+   the heading stays for screen readers), the card sits in the middle, the mascot is a soft backdrop. */
+@media (width<=1100px) {
+  .lg-wrap {
+    min-height: 100svh;
+    min-height: 100dvh;
+    padding-bottom: 24px;
+  }
+  .lg-copy {
+    clip-path: inset(50%);
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    overflow: hidden;
+  }
+  .lg-main {
+    align-content: center;
+    padding-top: 0;
+  }
+  .lg-card {
+    max-width: 440px;
+    margin-inline: auto;
+  }
+  .lg-wrap .hero-art {
+    opacity: 0.3;
+  }
+  .lg-body {
+    gap: 16px;
+    padding: 26px 24px 22px;
+  }
+  .lg-card .lg-foot {
+    padding: 14px 24px;
+  }
+}
+/* Short screens (small phones, landscape): trim spacing so the card still fits without scrolling. */
+@media (width<=1100px) and (height<=720px) {
+  .lg-wrap {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .lg-sub {
+    display: none;
+  }
+  .lg-body {
+    gap: 12px;
+    padding: 20px 20px 16px;
+  }
+  .lg-body h2 {
+    margin-top: 0;
+    font-size: 28px;
+  }
+  .lg-stack {
+    gap: 8px;
+  }
+  .lg-card .lg-foot {
+    padding: 12px 20px;
+  }
+}
