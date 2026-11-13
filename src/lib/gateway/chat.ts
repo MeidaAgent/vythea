@@ -55,6 +55,14 @@ async function settings(db: Admin) {
   return cached;
 }
 
+/** The provider key, with the stray spaces, line breaks or quotes a paste can leave around it taken off. */
+function providerKey() {
+  return (process.env.OPENROUTER_API_KEY ?? "")
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .trim();
+}
+
 /** What a model's provider said went wrong, turned into an answer that does not leak how we are set up. */
 async function upstreamFailure(res: Response) {
   let message = "";
@@ -82,6 +90,8 @@ async function upstreamFailure(res: Response) {
   return fail(503, "provider_unavailable", "The model provider is unavailable. Please try again shortly.", {
     "X-Upstream-Status": String(res.status),
     "X-Upstream-Error": message.replace(/[^\x20-\x7e]/g, " ").slice(0, 160),
+    // Only the length and the public prefix of the key, to tell a missing or mangled one from a rejected one.
+    "X-Upstream-Key": `len=${providerKey().length} prefix=${providerKey().slice(0, 8)}`,
   });
 }
 
@@ -214,7 +224,7 @@ export async function chatCompletions(req: Request): Promise<Response> {
     res = await fetch(`${OPENROUTER}/chat/completions`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY ?? ""}`,
+        Authorization: `Bearer ${providerKey()}`,
         "Content-Type": "application/json",
         "HTTP-Referer": "https://vythea.com",
         "X-Title": "Vythea",
