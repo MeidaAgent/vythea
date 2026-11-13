@@ -1061,7 +1061,6 @@
 
 /* The human check sits quietly under the form; its hint shows only when the check can't load. */
 .lg-ts {
-  min-height: 65px;
   margin: 0;
 }
 .lg-hint {
@@ -1069,4 +1068,37 @@
   margin: 0;
   font-size: 13px;
   line-height: 1.45;
+}
+
+/* The human check: the halo on the left, its status on the right. */
+.hc {
+  border: 1px solid var(--hair-blue);
+  background: #f2f4ff08;
+  align-items: center;
+  gap: 14px;
+  min-height: 112px;
+  padding: 8px 14px;
+  display: flex;
+}
+.hc canvas {
+  flex: none;
+}
+.hc-text {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+  display: flex;
+}
+.hc-text b {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.3;
+}
+.hc-text small {
+  color: var(--on-blue-mute);
+  font-size: 12px;
+}
+.hc-text .btn {
+  margin-top: 8px;
 }

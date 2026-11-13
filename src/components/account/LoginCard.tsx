@@ -4,8 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Mail, TriangleAlert, Wallet } from "lucide-react";
 import { Wordmark } from "@/components/brand/Wordmark";
-import { Turnstile } from "@/components/account/Turnstile";
-import { InkCanvas } from "@/components/home/InkCanvas";
+import { HumanCheck } from "@/components/account/HumanCheck";
 import { createClient } from "@/lib/supabase/client";
 
 type Method = "github" | "google" | "wallet" | "email";
@@ -19,23 +18,6 @@ const ENABLED = new Set(
 const has = (m: Method) => ENABLED.has(m);
 
 const LABEL: Record<Social, string> = { github: "GitHub", google: "Google" };
-
-// Layout numbers shared with account.css: the heading's size, the card's width and the page gutter.
-const clamp = (min: number, v: number, max: number) => Math.min(max, Math.max(min, v));
-
-/**
- * On wide screens the mascot gets exactly the gap between the heading and the card, so it never
- * touches either. Below 1100px the page stacks and she fades in behind everything.
- */
-const placeArt = (w: number) => {
-  if (w <= 1100) return { edge: 0.98, width: 0.95 };
-  const gutter = clamp(18, w * 0.032, 52);
-  const heading = clamp(48, w * 0.06, 88);
-  const textRight = gutter + Math.max(heading * 4.1, 320) + 24; // "ACCOUNT" is about 4.1 times the font size wide; the paragraph is 320px
-  const cardLeft = w - gutter - 420;
-  const edge = cardLeft - 16;
-  return { edge: edge / w, width: Math.max(edge - textRight, 200) / w };
-};
 
 function GitHubMark() {
   return (
@@ -92,13 +74,8 @@ export function LoginCard({
   // The human check: a one-use token that email and wallet sign-in must carry.
   const [captcha, setCaptcha] = useState<string | null>(null);
   const [captchaReset, setCaptchaReset] = useState(0);
-  const [captchaBad, setCaptchaBad] = useState(false);
 
-  const onToken = useCallback((token: string | null) => {
-    setCaptcha(token);
-    if (token) setCaptchaBad(false);
-  }, []);
-  const onCaptchaFail = useCallback(() => setCaptchaBad(true), []);
+  const onToken = useCallback((token: string | null) => setCaptcha(token), []);
   /** A token works once; after each attempt, win or lose, ask for another. */
   const spendCaptcha = () => {
     setCaptcha(null);
@@ -181,20 +158,10 @@ export function LoginCard({
   const socials = (["github", "google"] as const).filter(has);
 
   // The human check: shown above the email button, or under the wallet button when email is off.
-  const check = (
-    <>
-      <Turnstile onToken={onToken} onFail={onCaptchaFail} resetKey={captchaReset} />
-      {captchaBad && (
-        <p className="lg-hint" role="status">
-          The security check couldn&apos;t load. Turn off content blockers for this page and reload.
-        </p>
-      )}
-    </>
-  );
+  const check = <HumanCheck onToken={onToken} resetKey={captchaReset} />;
 
   return (
     <div className="lg-wrap">
-      <InkCanvas place={placeArt} flip scatterOnScroll={false} />
       <Link href="/" className="lg-brand" aria-label="Vythea home">
         <Wordmark />
       </Link>
@@ -292,7 +259,7 @@ export function LoginCard({
                         className="btn btn-fill lg-wide"
                         disabled={busy !== null || !email.trim() || !captcha}
                       >
-                        {busy === "email" ? "Sending…" : captcha ? "Send sign-in link" : "Verifying…"}
+                        {busy === "email" ? "Sending…" : "Send sign-in link"}
                       </button>
                     </form>
                   </>

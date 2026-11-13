@@ -16,44 +16,52 @@ type Api = {
 const api = () => (window as unknown as { turnstile?: Api }).turnstile;
 
 /**
- * Cloudflare's human check. It stays out of sight unless the visitor needs to do something, and hands
- * the parent a one-use token (or null when there is none). Change `resetKey` to ask for a fresh token.
+ * Cloudflare's human check, doing the real verifying. It draws nothing unless the visitor has to act
+ * (then its own box appears here); the parent shows the status in its own way. It hands over a one-use
+ * token, or null when there is none. Change `resetKey` to ask for a fresh token.
  */
 export function Turnstile({
   onToken,
   onFail,
+  onRendered,
   resetKey,
 }: {
   onToken: (token: string | null) => void;
   onFail: () => void;
+  /** The check has started running. */
+  onRendered: () => void;
   resetKey: number;
 }) {
   const box = useRef<HTMLDivElement>(null);
   const widget = useRef("");
-  const handlers = useRef({ onToken, onFail });
+  const handlers = useRef({ onToken, onFail, onRendered });
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    handlers.current = { onToken, onFail };
-  }, [onToken, onFail]);
+    handlers.current = { onToken, onFail, onRendered };
+  }, [onToken, onFail, onRendered]);
 
   useEffect(() => {
     const el = box.current;
     const turnstile = api();
     if (!ready || !el || !turnstile || widget.current) return;
+    const fail = () => {
+      handlers.current.onToken(null);
+      handlers.current.onFail();
+    };
     widget.current = turnstile.render(el, {
       sitekey: SITE_KEY,
       theme: "dark",
-      appearance: "always",
+      appearance: "interaction-only",
       // The flexible widget is at least 300px wide; on a narrow phone the compact one fits.
       size: el.clientWidth < 300 ? "compact" : "flexible",
       callback: (token: string) => handlers.current.onToken(token),
       "expired-callback": () => handlers.current.onToken(null),
-      "error-callback": () => {
-        handlers.current.onToken(null);
-        handlers.current.onFail();
-      },
+      "error-callback": fail,
+      "timeout-callback": fail,
+      "unsupported-callback": fail,
     });
+    handlers.current.onRendered();
     return () => {
       if (widget.current) api()?.remove(widget.current);
       widget.current = "";
