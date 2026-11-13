@@ -42,11 +42,14 @@ const ITEMS = GROUPS.flatMap((g) => g.items);
 export function DashShell({
   children,
   name,
+  avatar,
   credit,
 }: {
   children: ReactNode;
   /** Who is signed in, for the foot of the sidebar; null when nobody is. */
   name?: string | null;
+  /** Their picture: the GitHub photo, or the house character when they have none. */
+  avatar?: string | null;
   /** Credit balance in USD for the sidebar card; null when nobody is signed in. */
   credit?: number | null;
 }) {
@@ -119,7 +122,11 @@ export function DashShell({
         </div>
         {name && (
           <Link href="/dashboard/settings" className="side-user">
-            <span aria-hidden="true">{name.replace(/^0x/i, "").charAt(0).toUpperCase()}</span>
+            {avatar ? (
+              <img src={avatar} alt="" width={28} height={28} referrerPolicy="no-referrer" />
+            ) : (
+              <span aria-hidden="true">{name.replace(/^0x/i, "").charAt(0).toUpperCase()}</span>
+            )}
             {name}
           </Link>
         )}

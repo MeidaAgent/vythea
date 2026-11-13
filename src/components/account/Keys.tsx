@@ -90,7 +90,8 @@ export function Keys({ initial, username }: { initial: KeyRow[]; username: strin
       </p>
 
       <p className="acct-note">
-        The Vythea gateway isn&apos;t open yet. You can create keys now; they start working when it launches.
+        The Vythea gateway is live at <code>https://vythea.com/api/v1</code>. Calls are paid from your prepaid
+        credit, so a key needs credit on the Billing page before it can answer.
       </p>
 
       {secret && (

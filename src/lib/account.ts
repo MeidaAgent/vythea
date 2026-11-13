@@ -17,6 +17,15 @@ export function displayName(user: User): string {
   return String(user.user_metadata?.user_name ?? user.email ?? (wallet ? shorten(wallet) : "your account"));
 }
 
+/** Picture used when someone has none of their own (email and wallet sign-ins have no GitHub photo). */
+export const DEFAULT_AVATAR = "/assets/avatar-default.png";
+
+/** Their GitHub photo if they signed in with GitHub, otherwise the house character. */
+export function avatarUrl(user: User): string {
+  const photo = user.user_metadata?.avatar_url;
+  return typeof photo === "string" && photo.startsWith("https://") ? photo : DEFAULT_AVATAR;
+}
+
 const METHOD: Record<string, string> = { github: "GitHub", google: "Google", email: "Email", web3: "Wallet" };
 
 /** The ways this account can sign in, for the settings page. */
@@ -40,7 +49,7 @@ export async function requireUser(next: string) {
 }
 
 /** What the dashboard frame shows about the signed-in person, or null when nobody is signed in. */
-export async function getShellInfo(): Promise<{ name: string; credit: number } | null> {
+export async function getShellInfo(): Promise<{ name: string; credit: number; avatar: string } | null> {
   if (!hasSupabase) return null;
   const supabase = await createClient();
   const {
@@ -48,5 +57,5 @@ export async function getShellInfo(): Promise<{ name: string; credit: number } |
   } = await supabase.auth.getUser();
   if (!user) return null;
   const { data } = await supabase.from("profiles").select("credits_usd").eq("id", user.id).single();
-  return { name: displayName(user), credit: Number(data?.credits_usd ?? 0) };
+  return { name: displayName(user), credit: Number(data?.credits_usd ?? 0), avatar: avatarUrl(user) };
 }

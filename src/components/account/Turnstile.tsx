@@ -16,33 +16,26 @@ type Api = {
 const api = () => (window as unknown as { turnstile?: Api }).turnstile;
 
 /**
- * Cloudflare's human check, doing the real verifying. It draws nothing unless the visitor has to act
- * (then its own box appears here); the parent shows the status in its own way. It hands over a one-use
- * token, or null when there is none. Change `resetKey` to ask for a fresh token.
+ * Cloudflare's human check: its own widget, doing the real verifying. It hands over a one-use token,
+ * or null when there is none. Change `resetKey` to ask for a fresh token.
  */
 export function Turnstile({
   onToken,
   onFail,
-  onRendered,
-  onInteractive,
   resetKey,
 }: {
   onToken: (token: string | null) => void;
   onFail: () => void;
-  /** The check has started running. */
-  onRendered: () => void;
-  /** Cloudflare needs the visitor to tick a box (true), or no longer does (false). */
-  onInteractive: (active: boolean) => void;
   resetKey: number;
 }) {
   const box = useRef<HTMLDivElement>(null);
   const widget = useRef("");
-  const handlers = useRef({ onToken, onFail, onRendered, onInteractive });
+  const handlers = useRef({ onToken, onFail });
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    handlers.current = { onToken, onFail, onRendered, onInteractive };
-  }, [onToken, onFail, onRendered, onInteractive]);
+    handlers.current = { onToken, onFail };
+  }, [onToken, onFail]);
 
   useEffect(() => {
     const el = box.current;
@@ -55,21 +48,15 @@ export function Turnstile({
     widget.current = turnstile.render(el, {
       sitekey: SITE_KEY,
       theme: "dark",
-      appearance: "interaction-only",
+      appearance: "always",
       // The flexible widget is at least 300px wide; on a narrow phone the compact one fits.
       size: el.clientWidth < 300 ? "compact" : "flexible",
-      callback: (token: string) => {
-        handlers.current.onInteractive(false);
-        handlers.current.onToken(token);
-      },
-      "before-interactive-callback": () => handlers.current.onInteractive(true),
-      "after-interactive-callback": () => handlers.current.onInteractive(false),
+      callback: (token: string) => handlers.current.onToken(token),
       "expired-callback": () => handlers.current.onToken(null),
       "error-callback": fail,
       "timeout-callback": fail,
       "unsupported-callback": fail,
     });
-    handlers.current.onRendered();
     return () => {
       if (widget.current) api()?.remove(widget.current);
       widget.current = "";

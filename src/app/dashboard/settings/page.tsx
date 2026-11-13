@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SignOutButton } from "@/components/account/SignOutButton";
 import { Soon } from "@/components/account/Soon";
-import { requireUser, signInMethods, walletAddress } from "@/lib/account";
+import { avatarUrl, requireUser, signInMethods, walletAddress } from "@/lib/account";
 
 export const metadata: Metadata = { title: "Settings" };
 
@@ -17,7 +17,7 @@ export default async function SettingsPage() {
     );
   }
 
-  const avatar = me.user.user_metadata?.avatar_url as string | undefined;
+  const avatar = avatarUrl(me.user);
   const wallet = walletAddress(me.user);
   const joined = new Date(me.user.created_at).toLocaleDateString("en", {
     day: "numeric",
