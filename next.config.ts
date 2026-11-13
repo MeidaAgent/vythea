@@ -6,12 +6,12 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: process.cwd(),
   async rewrites() {
     return {
-      // api.vythea.com serves the gateway at /v1/..., which lives under /api/v1/ in this app.
+      // api.vythea.com serves the whole API (/v1/..., /me, /devices/...), which lives under /api/ in this app.
       beforeFiles: [
         {
-          source: "/v1/:path*",
+          source: "/:path((?!api/).*)",
           has: [{ type: "host", value: "api.vythea.com" }],
-          destination: "/api/v1/:path*",
+          destination: "/api/:path",
         },
       ],
     };

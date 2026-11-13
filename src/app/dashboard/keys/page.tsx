@@ -27,6 +27,7 @@ export default async function KeysPage() {
   const { data: keys } = await supabase
     .from("api_keys")
     .select("id,name,prefix,created_at,last_used_at,rpm_limit,daily_limit_usd")
+    .eq("kind", "key")
     .is("revoked_at", null)
     .order("created_at", { ascending: false });
 

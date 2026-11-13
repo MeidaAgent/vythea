@@ -32,6 +32,7 @@ export function Keys({ initial, username }: { initial: KeyRow[]; username: strin
     const { data } = await createClient()
       .from("api_keys")
       .select("id,name,prefix,created_at,last_used_at,rpm_limit,daily_limit_usd")
+      .eq("kind", "key")
       .is("revoked_at", null)
       .order("created_at", { ascending: false });
     if (data) setKeys(data);
