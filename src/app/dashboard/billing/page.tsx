@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Soon } from "@/components/account/Soon";
+import { TopUp } from "@/components/account/TopUp";
 import { requireUser } from "@/lib/account";
 import { fmtDateTime, fmtUsd } from "@/lib/format";
 
@@ -49,11 +50,7 @@ export default async function BillingPage() {
         </div>
       </dl>
 
-      <p className="acct-more">
-        <button type="button" className="btn btn-line btn-xs" disabled>
-          Add credit · soon
-        </button>
-      </p>
+      <TopUp />
 
       <h2 className="dash-h2">History</h2>
       {entries.length === 0 ? (

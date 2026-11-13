@@ -40,7 +40,7 @@ export const TERMS: LegalDoc = {
     {
       heading: "Limits and credit",
       blocks: [
-        "Each API key has a requests-per-minute limit and a daily spending limit, shown in your dashboard. Paid models draw on credit. Paid credit is not on sale yet; see the Refund Policy.",
+        "Each API key has a requests-per-minute limit and a daily spending limit, shown in your dashboard. Paid models draw on credit, which you add in advance with USDT or USDC; see the Refund Policy.",
       ],
     },
     {
@@ -142,19 +142,19 @@ export const PRIVACY: LegalDoc = {
 export const REFUNDS: LegalDoc = {
   slug: "refunds",
   title: "Refund Policy",
-  description: "Where refunds stand while Vythea has no paid plans yet.",
+  description: "How credit payments and refunds work at Vythea.",
   intro: "This page covers payments and refunds for Vythea.",
   sections: [
     {
-      heading: "Today",
+      heading: "Adding credit",
       blocks: [
-        "Paid credit and paid plans are not on sale yet. Nobody is charged for anything on Vythea today, and the free tier needs no payment details.",
+        "Credit is prepaid. You add it by sending USDT or USDC on a network shown at checkout, and it is added to your balance once the payment is confirmed. Pro and Team plans are not on sale yet, and the free tier needs no payment details.",
       ],
     },
     {
-      heading: "When payments open",
+      heading: "Payments on a blockchain",
       blocks: [
-        "This page will state the refund terms in full before you pay for the first time, and they will be shown at checkout as well. Until then there is nothing to refund, so no refund terms apply.",
+        "A payment on a blockchain can't be reversed once it is confirmed. Send the exact amount shown, on the network shown. If a payment did not add credit, or you sent the wrong amount or used the wrong network, write to us with the transaction hash and we will look into it.",
       ],
     },
     {

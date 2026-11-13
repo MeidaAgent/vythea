@@ -1077,6 +1077,20 @@
   line-height: 1.45;
 }
 
+/* Adding credit. */
+.topup {
+  margin: 28px 0 8px;
+}
+.topup .cf {
+  margin: 10px 0;
+}
+.topup-row {
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+  display: flex;
+}
+
 /* The human check: Cloudflare's own widget, with a short note and "Try again" under it if it fails. */
 .hc {
   flex-direction: column;
