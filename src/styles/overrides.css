@@ -86,26 +86,8 @@
   height: 30px;
 }
 
-/* Sign-in link in the hero bar. It stays visible on phones; the Guide button gives way first. */
-.nav-signin {
-  color: var(--on-blue);
-  opacity: 0.85;
-  white-space: nowrap;
-  padding: 0 6px;
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-.nav-signin:hover {
-  opacity: 1;
-}
-@media (width<=480px) {
-  .bar-in .nav-signin {
-    letter-spacing: 0.03em;
-    padding: 0 2px;
-    font-size: 9.5px;
-  }
-}
-@media (width<=420px) {
+/* On narrow phones the bar has room for Sign in and Install only; Guide stays in the footer. */
+@media (width<=520px) {
   .bar-in .nav-r .nav-guide {
     display: none;
   }

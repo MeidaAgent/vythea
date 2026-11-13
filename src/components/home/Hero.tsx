@@ -58,7 +58,7 @@ export function Hero() {
               Tokenomics
             </Link>
             <CaChip className="nav-ca" />
-            <Link href="/login" className="micro nav-signin">
+            <Link href="/login" className="btn btn-fill btn-xs">
               Sign in
             </Link>
             <Link href="/docs" className="btn btn-hollow btn-xs nav-guide">
