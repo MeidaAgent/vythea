@@ -44,7 +44,7 @@ export function Turnstile({
     widget.current = turnstile.render(el, {
       sitekey: SITE_KEY,
       theme: "dark",
-      appearance: "interaction-only",
+      appearance: "always",
       // The flexible widget is at least 300px wide; on a narrow phone the compact one fits.
       size: el.clientWidth < 300 ? "compact" : "flexible",
       callback: (token: string) => handlers.current.onToken(token),

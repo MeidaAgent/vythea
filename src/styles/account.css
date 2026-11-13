@@ -1061,6 +1061,7 @@
 
 /* The human check sits quietly under the form; its hint shows only when the check can't load. */
 .lg-ts {
+  min-height: 65px;
   margin: 0;
 }
 .lg-hint {

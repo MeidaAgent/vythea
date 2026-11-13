@@ -180,6 +180,18 @@ export function LoginCard({
 
   const socials = (["github", "google"] as const).filter(has);
 
+  // The human check: shown above the email button, or under the wallet button when email is off.
+  const check = (
+    <>
+      <Turnstile onToken={onToken} onFail={onCaptchaFail} resetKey={captchaReset} />
+      {captchaBad && (
+        <p className="lg-hint" role="status">
+          The security check couldn&apos;t load. Turn off content blockers for this page and reload.
+        </p>
+      )}
+    </>
+  );
+
   return (
     <div className="lg-wrap">
       <InkCanvas place={placeArt} flip scatterOnScroll={false} />
@@ -274,6 +286,7 @@ export function LoginCard({
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                       />
+                      {check}
                       <button
                         type="submit"
                         className="btn btn-fill lg-wide"
@@ -285,17 +298,7 @@ export function LoginCard({
                   </>
                 )}
 
-                {(has("email") || has("wallet")) && (
-                  <>
-                    <Turnstile onToken={onToken} onFail={onCaptchaFail} resetKey={captchaReset} />
-                    {captchaBad && (
-                      <p className="lg-hint" role="status">
-                        The security check couldn&apos;t load. Turn off content blockers for this page and
-                        reload.
-                      </p>
-                    )}
-                  </>
-                )}
+                {!has("email") && has("wallet") && check}
               </>
             )}
           </div>
