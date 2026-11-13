@@ -1,5 +1,5 @@
 import { admin } from "@/lib/gateway/admin";
-import { json, signedOut, whoIs } from "@/lib/gateway/device";
+import { json, signedOut, teamsOf, whoIs } from "@/lib/gateway/device";
 import { preflight } from "@/lib/gateway/http";
 import { displayName } from "@/lib/account";
 
@@ -18,6 +18,7 @@ export async function GET(request: Request) {
     db.from("free_claims").select("user_id").eq("user_id", who.userId).maybeSingle(),
   ]);
   const user = found?.user;
+  const teams = who.teamId ? await teamsOf(who.userId) : [];
   await db.from("api_keys").update({ last_used_at: new Date().toISOString() }).eq("id", who.id);
 
   // The free model counts as free to the app while the account still has free requests left.
@@ -41,7 +42,8 @@ export async function GET(request: Request) {
         : "free",
     // The app counts credit in cents.
     credits: Math.round(Number(profile?.credits_usd ?? 0) * 100),
-    team: null,
+    // The team this computer bills to, if it picked one and is still a member.
+    team: who.teamId ? (teams.find((t) => t.id === who.teamId) ?? null) : null,
     perks,
   });
 }

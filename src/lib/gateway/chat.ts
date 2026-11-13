@@ -209,6 +209,20 @@ export async function chatCompletions(req: Request): Promise<Response> {
   }
   if (!held) held = await db.rpc("gateway_reserve", { p_key_id: key.key_id, p_max_cost: reserve });
   if (held.error) {
+    if (held.error.code === "P0004" || /member limit reached/i.test(held.error.message)) {
+      return fail(
+        429,
+        "daily_limit_reached",
+        "You reached your daily limit on this team. It resets at midnight UTC, or ask the team owner to raise it.",
+      );
+    }
+    if (/insufficient team credit/i.test(held.error.message)) {
+      return fail(
+        402,
+        "insufficient_quota",
+        "The team doesn't have enough credit for this request. Ask the team owner to add credit.",
+      );
+    }
     if (held.error.code === "P0002" || /insufficient credit/i.test(held.error.message)) {
       return fail(
         402,
