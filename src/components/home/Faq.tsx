@@ -27,7 +27,7 @@ const QUESTIONS = [
   },
   {
     q: "What is Vythea Cloud?",
-    a: "The same agent on our servers. Ask in the chat to run a task there, keep a service running, or give a web app its own link. It is not open yet; when it opens it will be paid from your credit.",
+    a: "The same agent on our servers. Ask in the chat to run a task there, keep a service running, or give a web app its own link. Coming soon. When it opens it will be paid from your credit.",
   },
   { q: "Is there a phone app?", a: "Native iPhone and Android apps are coming." },
   {

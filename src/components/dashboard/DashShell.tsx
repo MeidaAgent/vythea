@@ -7,7 +7,7 @@ import { Wordmark } from "@/components/brand/Wordmark";
 import { LangPicker } from "@/components/ui/LangPicker";
 import { fmtUsd } from "@/lib/format";
 
-type Item = { to: string; label: string; art: string; built?: boolean };
+type Item = { to: string; label: string; art: string; built?: boolean; soon?: boolean };
 
 // The dashboard sections. Overview, Settings and API keys do real work; the others are pages that say
 // plainly when the feature opens.
@@ -17,7 +17,7 @@ const GROUPS: { name: string; items: Item[] }[] = [
     items: [
       { to: "/dashboard", label: "Overview", art: "cap-agent" },
       { to: "/dashboard/usage", label: "Usage", art: "cap-memory" },
-      { to: "/dashboard/cloud", label: "Cloud", art: "cap-chat" },
+      { to: "/dashboard/cloud", label: "Cloud", art: "cap-chat", soon: true },
       { to: "/dashboard/models", label: "Models", art: "cap-extend" },
       { to: "/dashboard/keys", label: "API keys", art: "cap-auto", built: true },
     ],
@@ -99,6 +99,7 @@ export function DashShell({
                   <Link key={item.to} href={item.to} className={`side-link${item === here ? " on" : ""}`}>
                     {n}
                     {item.label}
+                    {item.soon && <span className="side-soon">soon</span>}
                   </Link>
                 );
               })}

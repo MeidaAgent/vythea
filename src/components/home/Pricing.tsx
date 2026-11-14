@@ -170,7 +170,7 @@ export function Pricing() {
         </div>
         <p className="micro tiers-note">
           Prices in USD. Local use is free forever. Hosted models are paid from prepaid credit as you use them,
-          and Pro is bought from that same credit. Team and Vythea Cloud open later.
+          and Pro and Team are bought from that same credit. Vythea Cloud is coming soon.
         </p>
       </div>
     </section>

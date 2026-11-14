@@ -23,7 +23,7 @@ export function CloudSection() {
     <section className="band deep" id="cloud">
       <div className="shell">
         <div className="band-top">
-          <p className="micro">Vythea Cloud</p>
+          <p className="micro">Vythea Cloud · Coming soon</p>
           <h2>
             Close the laptop.
             <br />
@@ -59,7 +59,7 @@ export function CloudSection() {
           </div>
         </div>
         <div className="cloud-foot">
-          <p>Comes with Pro. Compute is about $6 per GB a month from your credit, charged by the second.</p>
+          <p>Coming soon. It will be paid from your credit: about $6 per GB a month, charged by the second.</p>
           <div className="cloud-ctas">
             <Link className="btn btn-fill" href="/docs/cloud">
               <span>How it works</span>

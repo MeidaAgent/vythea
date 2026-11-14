@@ -15,7 +15,7 @@ export default async function Page() {
           ? "Where your agent's projects run and get their live links."
           : "Accounts aren't switched on for this site yet."
       }
-      note={me ? "Vythea Cloud isn't open yet." : undefined}
+      note={me ? "Coming soon." : undefined}
     />
   );
 }

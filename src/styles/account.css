@@ -1077,6 +1077,16 @@
   line-height: 1.45;
 }
 
+/* A sidebar item whose feature isn't open yet. */
+.side-soon {
+  color: var(--on-blue-mute, currentColor);
+  opacity: 0.7;
+  margin-left: 8px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 /* Adding credit. */
 .topup {
   margin: 28px 0 8px;

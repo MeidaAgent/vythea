@@ -8,7 +8,7 @@ import "@/styles/price.css";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "What every hosted model costs on Vythea: text per million tokens, images, video, speech and search, and Vythea Cloud hosting by the second.",
+    "What every hosted model costs on Vythea: text per million tokens, images, video, speech and search, and Vythea Cloud hosting by the second (coming soon).",
 };
 
 // Vythea Cloud: USD per MB of memory per second awake, and storage past the free GB.
@@ -77,14 +77,14 @@ export default function PricePage() {
           <PriceList />
 
           <section id="cloud" className="cl">
-            <p className="micro">Vythea Cloud</p>
+            <p className="micro">Vythea Cloud · Coming soon</p>
             <h2 className="cl-title">
               Pay while it runs.
               <br />
               Asleep is free.
             </h2>
             <p className="price-sub">
-              Ask for a website, a bot, a database or a game server and Vythea Cloud hosts it. There is no
+              Coming soon. Ask for a website, a bot, a database or a game server and Vythea Cloud hosts it. There is no
               plan and no server to rent: it wakes when someone visits or joins, sleeps a few minutes after
               the last one leaves, and you pay by the second only while it is awake, from your credit.
             </p>
